@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Checkbox } from "@/app/components/loveable/checkbox";
 import { Label } from "@/app/components/loveable/label";
 import { Tag } from "lucide-react";
-import { Badge } from "../loveable/badge";
+import { Badge } from "@/app/components/loveable/badge";
 
 interface Category {
   id: string;

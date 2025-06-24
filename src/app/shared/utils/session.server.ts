@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import type { NextRequest } from 'next/server'
 import { User } from '@/app/shared/types'
 
 export const setSessionCookie = async (user: User) => {
@@ -21,4 +22,15 @@ export const getSessionUser = async (): Promise<User | null> => {
 export const clearSession = async () => {
   const cookieStore = await cookies()
   cookieStore.set('session', '', { maxAge: 0 })
+}
+
+export const verifyAuth = (req: NextRequest): User | null => {
+  const session = req.cookies.get('session')?.value
+  if (!session) return null
+
+  try {
+    return JSON.parse(session) as User
+  } catch {
+    return null
+  }
 }

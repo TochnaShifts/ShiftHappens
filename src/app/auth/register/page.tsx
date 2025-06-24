@@ -68,7 +68,7 @@ export default function RegisterForm({ onRegistrationSuccess }: RegisterFormProp
         onChange={(val: string[]) => setValue('userCategories', val)}
       />
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" className="w-full" dir="ltr" disabled={isSubmitting}>
         {isSubmitting ? 'נרשם...' : (
           <><UserPlus className="w-4 h-4 ml-2" /> הרשמה</>
         )}

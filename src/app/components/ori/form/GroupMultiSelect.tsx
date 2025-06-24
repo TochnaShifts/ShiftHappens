@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Checkbox } from "@/app/components/loveable/checkbox";
 import { Label } from "@/app/components/loveable/label";
 import { Users } from "lucide-react";
-import { Badge } from "../loveable/badge";
+import { Badge } from "../../loveable/badge";
 
 interface Group {
   id: string;
@@ -64,9 +64,9 @@ export const GroupMultiSelect = ({ selected, onChange, error }: Props) => {
           </Badge>
         ))}
       </div>
-      {selected.length === 0 && (
-        <p className="text-sm text-gray-500">יש לבחור לפחות קבוצה אחת</p>
-      )}
+      <p className="text-sm text-gray-500 min-h-[17px]">
+        {selected.length === 0 ? "יש לבחור לפחות קבוצה אחת" : "\u00A0"}
+      </p>
     </div>
   );
 };

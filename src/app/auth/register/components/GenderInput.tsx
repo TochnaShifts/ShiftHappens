@@ -12,13 +12,13 @@ interface Props {
 
 export const GenderSelect = ({ setValue, error, disabled }: Props) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" dir="rtl">
       <Label htmlFor="gender">מגדר</Label>
       <Select onValueChange={(val) => setValue('gender', Number(val) as Gender)} disabled={disabled}>
-        <SelectTrigger id="gender" className="h-12">
+        <SelectTrigger id="gender" className="h-12" dir="rtl">
           <SelectValue placeholder="בחר מגדר" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent dir="rtl">
           <SelectItem value={String(Gender.Male)}>זכר</SelectItem>
           <SelectItem value={String(Gender.Female)}>נקבה</SelectItem>
         </SelectContent>

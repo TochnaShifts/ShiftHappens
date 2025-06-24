@@ -6,7 +6,7 @@ export const userRegisterSchema = z.object({
   password: z.string().min(6, 'סיסמה חייבת להכיל לפחות 6 תווים'),
   confirmPassword: z.string().min(6, 'סיסמה חייבת להכיל לפחות 6 תווים'),
   fullName: z.string().min(1, 'נדרש שם מלא'),
-  gender: z.nativeEnum(Gender),
+  gender: z.nativeEnum(Gender, { message: 'נדרש מגדר' }),
   selectedGroups: z.array(z.string()).min(1, 'בחר לפחות קבוצה אחת'),
   userCategories: z.array(z.string()).optional(),
 }).refine((data) => data.password === data.confirmPassword, {

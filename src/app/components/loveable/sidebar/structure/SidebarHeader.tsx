@@ -1,0 +1,20 @@
+ "use client"
+
+import React from "react"
+import { cn } from "@/app/components/utils/utils"
+
+
+export const SidebarHeader = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      data-sidebar="header"
+      className={cn("flex flex-col gap-2 p-2", className)}
+      {...props}
+    />
+  )
+})
+SidebarHeader.displayName = "SidebarHeader"

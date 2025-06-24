@@ -1,0 +1,36 @@
+ "use client"
+
+import * as React from "react"
+import { cn } from "@/app/components/utils/utils"
+import { Skeleton } from "@/app/components/loveable/skeleton"
+
+export const SidebarMenuSkeleton = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div"> & {
+    showIcon?: boolean
+  }
+>(({ showIcon = false, className, ...props }, ref) => {
+  const width = React.useMemo(() => {
+    return `${Math.floor(Math.random() * 40) + 50}%`
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      data-sidebar="menu-skeleton"
+      className={cn("rounded-md h-8 flex gap-2 px-2 items-center", className)}
+      {...props}
+    >
+      {showIcon && (
+        <Skeleton className="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
+      )}
+      <Skeleton
+        className="h-4 flex-1 max-w-[--skeleton-width]"
+        data-sidebar="menu-skeleton-text"
+        style={{ "--skeleton-width": width } as React.CSSProperties}
+      />
+    </div>
+  )
+})
+
+SidebarMenuSkeleton.displayName = "SidebarMenuSkeleton"

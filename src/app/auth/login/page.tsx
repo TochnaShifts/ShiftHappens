@@ -30,7 +30,7 @@ export default function LoginForm() {
       if (user.isGlobalAdmin) {
         router.push('/global-admin')
       } else {
-        router.push('/user')
+        router.push('/user/dashboard')
       }
 
     } catch (err: any) {
@@ -55,7 +55,7 @@ export default function LoginForm() {
         <PasswordInput register={register} error={errors.password} disabled={isSubmitting} label="סיסמה" name="password" />
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" className="w-full" dir="ltr" disabled={isSubmitting}>
         {isSubmitting ? 'מתחבר...' : <><LogIn className="w-4 h-4 ml-2" /> כניסה</>}
       </Button>
     </form>

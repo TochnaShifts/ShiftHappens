@@ -2,11 +2,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserByUsername } from '@/app/shared/firebase/CRUD/users'
 import { isPasswordValid } from '@/app/shared/utils/hash'
-import { setSessionCookie } from '@/app/shared/utils/session'
+import { setSessionCookie } from '@/app/shared/utils/session.server'
 
 export async function POST(req: NextRequest) {
   const { action, data } = await req.json()
-  console.log(data)
   switch (action) {
     case 'login':
       return tryLogin(data.username, data.password)
