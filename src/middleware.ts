@@ -11,7 +11,6 @@ const protectedGlobalAdminRoutes = ['/global-admin']
 
 export async function middleware(request: NextRequest) {
   const session = await verifyAuth(request)
-  console.log('session', session)
   const pathname = request.nextUrl.pathname
 
   // User not logged in but trying to access protected pages

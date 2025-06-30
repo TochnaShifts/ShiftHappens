@@ -1,30 +1,36 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { UserProvider } from '@/app/contexts/UserContext'
-import { Group, User, UserCategory } from '@/app/shared/types'
-import ClientLayoutWrapper from '@/app/components/ori/layout/ClientLayoutWrapper'
+import React from "react";
+import { UserProvider } from "@/app/contexts/UserContext";
+import { Group, User, UserCategory } from "@/app/shared/types";
+import { ClientLayoutWrapper } from "@/app/components/ori/layout/ClientLayoutWrapper";
 
 type Props = {
-  user: User
-  groupsAdmin: Group[]
-  userCategories: UserCategory[]
-  children: React.ReactNode
-}
+  user: User | null;
+  userGroups: Group[];
+  groupsAdmin: Group[];
+  userCategories: UserCategory[];
+  children: React.ReactNode;
+};
 
-export default function ClientShell({
+const ClientShellComponent = ({
   user,
+  userGroups,
   groupsAdmin,
   userCategories,
   children,
-}: Props) {
+}: Props) => {
   return (
     <UserProvider
       initialUser={user}
+      initialUserGroups={userGroups}
       initialGroupsAdmin={groupsAdmin}
       initialUserCategories={userCategories}
     >
       <ClientLayoutWrapper user={user}>{children}</ClientLayoutWrapper>
     </UserProvider>
-  )
-}
+  );
+};
+
+const ClientShell = React.memo(ClientShellComponent);
+export default ClientShell;

@@ -34,7 +34,6 @@ export default function LoginForm() {
       }
 
     } catch (err: any) {
-      console.log(err)
       setError(err.message || 'שגיאה בהתחברות')
     }
   }

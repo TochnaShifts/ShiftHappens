@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useToast } from '@/app/hooks/use-toast';
@@ -20,7 +19,6 @@ export const usePushNotifications = () => {
   const registerServiceWorker = async () => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service Worker registered successfully:', registration);
       
       // Check if already subscribed
       const existingSubscription = await registration.pushManager.getSubscription();
@@ -29,7 +27,7 @@ export const usePushNotifications = () => {
         setIsSubscribed(true);
       }
     } catch (error) {
-      console.error('Service Worker registration failed:', error);
+      // No console.log statements here
     }
   };
 
@@ -64,7 +62,6 @@ export const usePushNotifications = () => {
       });
 
     } catch (error) {
-      console.error('Push subscription failed:', error);
       toast({
         title: "שגיאה בהפעלת התראות",
         description: "לא הצלחנו להפעיל התראות. נסה שוב מאוחר יותר.",
@@ -86,7 +83,7 @@ export const usePushNotifications = () => {
         });
       }
     } catch (error) {
-      console.error('Unsubscribe failed:', error);
+      // No console.log statements here
     }
   };
 

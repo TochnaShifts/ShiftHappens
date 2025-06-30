@@ -1,19 +1,31 @@
-'use client'
+import { loadUserContext } from '@/app/shared/loaders/loadUserContext'
+import { loadDashboardData } from './loadDashboardData'
+import {
+  DashboardHeader,
+  QuickStatsCards,
+  UpcomingShiftsCard,
+  PointsOverviewCard,
+  RecentActivityCard
+} from './components'
 
-import React from 'react'
-import { useUser } from '@/app/contexts/UserContext'
+export default async function DashboardPage() {
+  const { user } = await loadUserContext()
+  const { upcomingShifts, pointsData, recentActivity, userRanks, completedShiftsHoursThisMonth } = await loadDashboardData(user!.id)
 
-const DashboardPage = () => {
-    const { user, groupsAdmin, userCategories, signOut } = useUser();
-    
-    return (
-        <div>
-        <h1>{JSON.stringify(user)}</h1>
-        <h1>{JSON.stringify(groupsAdmin)}</h1>
-        <h1>{JSON.stringify(userCategories)}</h1>
-        <button onClick={signOut}>Sign Out</button>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50" dir="rtl">
+      <DashboardHeader user={user!} />
+
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        <QuickStatsCards upcomingShifts={upcomingShifts} pointsData={pointsData} recentActivity={recentActivity} userRanks={userRanks} completedShiftsHoursThisMonth={completedShiftsHoursThisMonth} />
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          <UpcomingShiftsCard shifts={upcomingShifts} />
+          <PointsOverviewCard pointsData={pointsData} />
         </div>
-    )
-}
 
-export default DashboardPage
+        <RecentActivityCard activity={recentActivity} />
+      </div>
+    </div>
+  )
+}

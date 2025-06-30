@@ -3,7 +3,7 @@ import { AssignmentType, Gender, MultiplierType, RequestType } from "./enums"
 // UserGroupRole is a helper type for group membership with role info
 export type UserGroupRole = {
     groupId: string
-    isAdmin: boolean
+    isAdmin: boolean,
   }
   
   export interface User {
@@ -15,14 +15,16 @@ export type UserGroupRole = {
     isGlobalAdmin?: boolean
     userCategories: string[] // IDs or slugs of categories
     groups: UserGroupRole[] // groups with admin flags
-    gender: Gender
+    gender: Gender,
+    createdAt: Date 
   }
   
   export interface Group {
     id: string
     displayName: string
     hasPointsTracking: boolean
-    type: string // e.g., "guard", "logistics", etc.
+    type: string // e.g., "guard", "logistics", etc.,
+    createdAt: Date
   }
   
   export interface UserGroupPoints {
@@ -30,20 +32,21 @@ export type UserGroupRole = {
     userId: string
     groupId: string
     count: number
-    lastDate: string // ISO date string
+    lastDate: Date // ISO date string,
   }
   
   export interface Shift {
     id: string
     groupId: string
     displayName: string
-    startDate: string
-    endDate: string
+    startDate: Date
+    endDate: Date
     includedUserCategories: string[]
     excludedUserCategories: string[]
     users: string[] // assigned user IDs
     points: number
     isFinished: boolean
+    createdAt: Date
   }
   
   export interface ShiftAssignment {
@@ -51,17 +54,19 @@ export type UserGroupRole = {
     shiftId: string
     userId: string
     assignedBy: AssignmentType
-    assignedAt: string
+    assignedAt: Date
   }
   
   export interface Request {
     id: string
     userId: string
-    startDate: string
-    endDate: string
+    startDate: Date
+    endDate: Date
     type: RequestType
     description: string
+    createdAt: Date
   }
+  
   
   export interface Template {
     id: string
@@ -69,6 +74,7 @@ export type UserGroupRole = {
     includedUserCategories: string[]
     excludedUserCategories: string[]
     points: number
+    createdAt: Date
   }
   
   export interface UserCategory {
@@ -76,4 +82,5 @@ export type UserGroupRole = {
     displayName: string
     pointsMultiplier: number
     multiplierType: MultiplierType
+    createdAt: Date
   }

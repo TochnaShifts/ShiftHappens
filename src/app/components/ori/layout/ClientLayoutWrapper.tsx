@@ -1,20 +1,19 @@
-import React, { ReactNode } from 'react'
-import { redirect } from 'next/navigation'
-import ClientLayout from '@/app/components/ori/layout/ClientLayout'
-import { Group, User, UserCategory } from '@/app/shared/types'
-import { UserProvider } from '@/app/contexts/UserContext'
+import React, { ReactNode, useMemo } from "react";
+import { redirect } from "next/navigation";
+import { ClientLayout } from "@/app/components/ori/layout/ClientLayout";
+import { Group, User, UserCategory } from "@/app/shared/types";
+import { UserProvider } from "@/app/contexts/UserContext";
 
-export default function ClientLayoutWrapper({
-  user,
-  children,
-}: {
-  user: User
-  children: ReactNode
-}) {
-  if (!user) redirect('/auth')
-  if (user?.isGlobalAdmin) redirect('/global-admin')
+type Props = {
+  user: User | null;
+  children: ReactNode;
+};
 
-  return (
-      <ClientLayout>{children}</ClientLayout>
-  )
-}
+export const ClientLayoutWrapper = ({ user, children }: Props) => {
+  const memoUser = useMemo(() => user, [user]);
+  if (!memoUser) redirect("/auth");
+  if (memoUser?.isGlobalAdmin) redirect("/global-admin");
+
+  return <ClientLayout>{children}</ClientLayout>;
+};
+

@@ -8,15 +8,17 @@ interface SidebarNavButtonProps {
   label: string;
   onClick?: () => void;
   colorActive: string; // Tailwind gradient colors e.g. "from-blue-500 to-blue-600"
+  className?: string;
+  variant?: "default" | "ghost" | "outline";
 }
 
-export const SidebarNavButton = ({ path, active, icon: Icon, label, onClick, colorActive }: SidebarNavButtonProps) => {
+export const SidebarNavButton = ({ path, active, icon: Icon, label, onClick, colorActive, className, variant }: SidebarNavButtonProps) => {
   return (
     <Link href={path} onClick={onClick}>
       <Button 
-        variant={active ? "default" : "ghost"}
+        variant={variant? variant : active ? "default" : "ghost"}
         size="lg"
-        className={`w-full justify-start ${
+        className={className? className : `w-full justify-start ${
           active
             ? `bg-gradient-to-r ${colorActive} hover:from-opacity-90 hover:to-opacity-90 text-white`
             : "hover:bg-gray-800 text-gray-300 hover:text-white"

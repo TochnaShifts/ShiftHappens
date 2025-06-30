@@ -1,0 +1,19 @@
+{
+    "piny.project_settings": {
+        "open-pages": [
+            "pinyfakepage.html"
+        ],
+        "app-routes": {
+            "routes": [
+                "/",
+                "/(screens)/global-admin",
+                "/(screens)/user/dashboard",
+                "/auth",
+                "/auth/login",
+                "/auth/register",
+                "/group-admin/603afa0e-4e65-4180-b148-e3d894a1fadb/dashboard"
+            ],
+            "current_route": "/group-admin/603afa0e-4e65-4180-b148-e3d894a1fadb/dashboard"
+        }
+    }
+}

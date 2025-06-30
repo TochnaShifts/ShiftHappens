@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/app/hooks/use-toast';
 
@@ -17,8 +16,6 @@ export const useTemplates = (groupId?: string) => {
 
   const fetchTemplates = async () => {
     try {
-      console.log(`Mock API: Fetching templates for group ${groupId}`);
-      
       // Simulate API call that would fetch templates from backend
       // In a real implementation, this would be:
       // const response = await axios.get(`/api/groups/${groupId}/templates`);
@@ -56,10 +53,8 @@ export const useTemplates = (groupId?: string) => {
         }
       ];
 
-      console.log('Mock API: Templates fetched successfully', mockTemplates);
       setTemplates(mockTemplates);
     } catch (error) {
-      console.error('Mock API: Error fetching templates:', error);
       toast({
         title: 'שגיאה',
         description: 'לא הצלחנו לטעון את התבניות',
@@ -72,8 +67,6 @@ export const useTemplates = (groupId?: string) => {
 
   const fetchCategories = async () => {
     try {
-      console.log('Mock API: Fetching user categories');
-      
       // Simulate API call that would fetch categories from backend
       // In a real implementation, this would be:
       // const response = await axios.get('/api/user-categories');
@@ -85,17 +78,13 @@ export const useTemplates = (groupId?: string) => {
         { id: 'cat4', display_name: 'יכול להרים כבד' }
       ];
 
-      console.log('Mock API: Categories fetched successfully', mockCategories);
       setCategories(mockCategories);
     } catch (error) {
-      console.error('Mock API: Error fetching categories:', error);
     }
   };
 
   const createTemplate = async (templateData: any) => {
     try {
-      console.log('Mock API: Creating template', templateData);
-      
       // Simulate API call that would create template in backend
       // In a real implementation, this would be:
       // const response = await axios.post(`/api/groups/${groupId}/templates`, templateData);
@@ -107,7 +96,6 @@ export const useTemplates = (groupId?: string) => {
         most_used: false
       };
 
-      console.log('Mock API: Template created successfully', newTemplate);
       setTemplates(prev => [newTemplate, ...prev]);
 
       toast({
@@ -117,7 +105,6 @@ export const useTemplates = (groupId?: string) => {
 
       return newTemplate;
     } catch (error) {
-      console.error('Mock API: Error creating template:', error);
       toast({
         title: 'שגיאה',
         description: 'לא הצלחנו ליצור את התבנית',
@@ -129,8 +116,6 @@ export const useTemplates = (groupId?: string) => {
 
   const updateTemplate = async (templateId: string, templateData: any) => {
     try {
-      console.log(`Mock API: Updating template ${templateId}`, templateData);
-      
       // Simulate API call that would update template in backend
       // In a real implementation, this would be:
       // const response = await axios.put(`/api/templates/${templateId}`, templateData);
@@ -143,7 +128,6 @@ export const useTemplates = (groupId?: string) => {
         )
       );
 
-      console.log('Mock API: Template updated successfully');
       toast({
         title: 'הצלחה',
         description: 'התבנית עודכנה בהצלחה'
@@ -151,7 +135,6 @@ export const useTemplates = (groupId?: string) => {
 
       return templateData;
     } catch (error) {
-      console.error('Mock API: Error updating template:', error);
       toast({
         title: 'שגיאה',
         description: 'לא הצלחנו לעדכן את התבנית',
@@ -163,21 +146,17 @@ export const useTemplates = (groupId?: string) => {
 
   const deleteTemplate = async (templateId: string) => {
     try {
-      console.log(`Mock API: Deleting template ${templateId}`);
-      
       // Simulate API call that would delete template from backend
       // In a real implementation, this would be:
       // await axios.delete(`/api/templates/${templateId}`);
 
       setTemplates(prev => prev.filter(template => template.id !== templateId));
 
-      console.log('Mock API: Template deleted successfully');
       toast({
         title: 'הצלחה',
         description: 'התבנית נמחקה בהצלחה'
       });
     } catch (error) {
-      console.error('Mock API: Error deleting template:', error);
       toast({
         title: 'שגיאה',
         description: 'לא הצלחנו למחוק את התבנית',

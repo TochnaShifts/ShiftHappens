@@ -1,25 +1,30 @@
 import { getSessionUser } from '@/app/shared/utils/session.server'
 import { getGroupsByIds } from '@/app/shared/firebase/CRUD/groups'
 import { getUserCategoriesByIds } from '@/app/shared/firebase/CRUD/userCategories'
-import { Group, User, UserCategory } from '@/app/shared/types'
+import { Group, User, UserCategory, UserGroupRole } from '@/app/shared/types'
+import { Timestamp } from 'firebase/firestore'
 
 export async function loadUserContext(): Promise<{
   user: User | null
+  userGroups: Group[]
   groupsAdmin: Group[]
   userCategories: UserCategory[]
 }> {
   const user = await getSessionUser()
 
-  if (!user) return { user: null, groupsAdmin: [], userCategories: [] }
+  if (!user) return { user: null, userGroups: [], groupsAdmin: [], userCategories: [] }
 
+  user.createdAt = user.createdAt instanceof Timestamp ? user.createdAt.toDate() : user.createdAt
 
-  const groupsAdmin = user.groups?.length
+  const userGroups = user.groups?.length
     ? (await getGroupsByIds(user.groups.map(g => g.groupId))).filter((g): g is Group => g !== null)
     : []
+
+  const groupsAdmin = (await getGroupsByIds(user.groups.filter(g => g.isAdmin).map(g => g.groupId))).filter((g): g is Group => g !== null)
 
   const userCategories = user.userCategories?.length
     ? (await getUserCategoriesByIds(user.userCategories)).filter((c): c is UserCategory => c !== null)
     : []
 
-  return { user, groupsAdmin, userCategories }
+  return { user, userGroups, groupsAdmin, userCategories }
 }

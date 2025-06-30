@@ -1,7 +1,8 @@
 import { getDoc, doc, where, getDocs, query, collection as firestoreCollection } from "firebase/firestore";
-import { Group } from "../../types/models";
+import { Group, User } from "../../types/models";
 import { createDoc, deleteDocById, getCollection, getDocById, updateDocById } from "../firestore-crud";
 import { db } from "../clientApp";
+import { docTo, validCollection } from "../../utils/firestoreConverters";
 
 const collection = 'groups';
 
@@ -11,15 +12,16 @@ export const updateGroup = (id: string, data: Partial<Group>) => updateDocById<G
 export const deleteGroup = (id: string) => deleteDocById(collection, id);
 
 export async function getGroupById(id: string) {
-  const q = query(firestoreCollection(db, collection), where('id', '==', id));
-  const querySnapshot = await getDocs(q);
-  const doc = querySnapshot.docs[0];
-  return doc ? { id: doc.id, ...doc.data() } as Group & { id: string } : null;
+  const groupsCollection = validCollection<Group>(collection);
+  const docRef = doc(groupsCollection, id);
+  const snapshot = await getDoc(docRef);
+  const group = snapshot.exists() ? docTo<Group>(snapshot) : null;
+  return group;
   }
   
   // Batch fetch groups by ids:
   export async function getGroupsByIds(ids: string[]) {
     const promises = ids.map(id => getGroupById(id));
     const groups = await Promise.all(promises);
-    return groups.filter(Boolean); // remove nulls
+    return groups.filter((g): g is Group => g !== null); // remove nulls
   }

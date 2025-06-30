@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import { Globe, Shield, Home, LogOut, Menu, X } from "lucide-react";
@@ -18,41 +18,43 @@ export const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const params = useParams();
+  const { user, userGroups, groupsAdmin, signOut } = useUser();
 
-  const { user, groupsAdmin, signOut } = useUser();
-
-  const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path + "/");
-
+  const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
   const toggleMobile = () => setMobileOpen(!mobileOpen);
   const closeMobile = () => setMobileOpen(false);
-
+  
   // User status info
   const getUserStatus = () => {
     if (user?.isGlobalAdmin)
       return { label: "מנהל מערכת", icon: Globe, color: "text-red-500" };
     if (groupsAdmin.length > 0)
-      if(isInGroupAdmin){
-      return {
-        label: `מנהל ${groupsAdmin.find((g) => g.id === currentGroupId)?.displayName}`,
-        icon: Shield,
-        color: "text-orange-400",
-      };
-    }else{
-      return {
-        label: `מנהל ${groupsAdmin.length} קבוצות`,
-        icon: Shield,
-        color: "text-orange-400",
-      };
-    }
-      return { label: "משתמש רגיל", icon: null, color: "text-gray-400" };
+      if (isInGroupAdmin) {
+        return {
+          label: `מנהל ${
+            userGroups.find((g) => g.id === currentGroupId)?.displayName
+          }`,
+          icon: Shield,
+          color: "text-orange-400",
+        };
+      } else {
+        return {
+          label: `מנהל ${groupsAdmin.length} קבוצות`,
+          icon: Shield,
+          color: "text-orange-400",
+        };
+      }
+    return { label: "משתמש רגיל", icon: null, color: "text-gray-400" };
   };
 
   // Determine sidebar mode:
   // Are we inside a groupAdmin screen? (URL pattern: /group-admin/[groupId]/...)
-  const isInGroupAdmin =
-    pathname.startsWith("/group-admin") && !!params?.groupId;
+  const isInGroupAdmin =pathname.startsWith("/group-admin") && !!params?.groupId;
   const currentGroupId = params?.groupId;
+
+
+  useEffect(() => {
+  }, [userGroups]);
 
   return (
     <>
@@ -65,7 +67,11 @@ export const Sidebar = () => {
           onClick={toggleMobile}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </Button>
       </div>
 
@@ -92,9 +98,7 @@ export const Sidebar = () => {
         <SidebarUserInfo
           user={user}
           status={getUserStatus()}
-          onNotificationsClick={() =>
-            alert("מערכת ההתראות תהיה זמינה בקרוב")
-          }
+          onNotificationsClick={() => alert("מערכת ההתראות תהיה זמינה בקרוב")}
         />
 
         <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
@@ -126,12 +130,12 @@ export const Sidebar = () => {
               <SidebarSectionTitle
                 icon={Shield}
                 color="text-orange-500"
-                title="ניהול קבוצות"
+                title="ניהול קבוצה"
               />
               {/* Find the group for the current ID */}
-              {groupsAdmin
+              {userGroups
                 .filter((g) => g.id === currentGroupId)
-                .map(({ id, displayName }) => {
+                .map(({ id }) => {
                   const navItems = groupAdminNav(id);
                   return (
                     <>
@@ -149,6 +153,45 @@ export const Sidebar = () => {
                     </>
                   );
                 })}
+              {/* Switch to another group admin view */}
+              {userGroups.filter((g) => g.id !== currentGroupId).length >
+                0 && (
+                <>
+                  <hr className="border-gray-700 my-2" />
+                  <SidebarSectionTitle
+                    icon={Shield}
+                    color="text-orange-400"
+                    title="ניהול קבוצות נוספות"
+                  />
+                  {groupsAdmin
+                    .filter((g) => g.id !== currentGroupId)
+                    .map(({ id, displayName }) => (
+                      <SidebarNavButton
+                        key={id}
+                        path={`/group-admin/${id}/dashboard`}
+                        active={pathname.startsWith(`/group-admin/${id}`)}
+                        icon={Shield}
+                        label={displayName}
+                        colorActive="from-orange-400 to-orange-500"
+                        onClick={closeMobile}
+                      />
+                    ))}
+                </>
+              )}
+
+              {/* Back to main user screen */}
+              <div className="p-3 md:p-4 border-t border-gray-700">
+                <SidebarNavButton
+                  path="/user/dashboard"
+                  active={false}
+                  icon={Home}
+                  label="חזרה למסך הראשי"
+                  colorActive="from-gray-500 to-gray-700"
+                  onClick={closeMobile}
+                  className="w-full justify-start border-blue-500 text-blue-400 hover:bg-blue-900/60 mb-2 text-sm p-2"
+                  variant="outline"
+                />
+              </div>
             </>
           )}
 

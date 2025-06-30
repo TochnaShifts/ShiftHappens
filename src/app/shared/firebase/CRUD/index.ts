@@ -6,5 +6,4 @@ export * from './templates'
 export * from './userGroupPoints'
 export * from './userCategories'
 export * from './shiftAssignments'
-
-console.log('✅ CRUD index loaded');
+export * from './regularUser/dashboard'

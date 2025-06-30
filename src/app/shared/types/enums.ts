@@ -6,7 +6,7 @@ export enum RequestType {
   
   export enum AssignmentType {
     Auto = 1,
-    Admin,
+    Manual,
   }
   
   export enum MultiplierType {
