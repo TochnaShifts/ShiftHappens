@@ -1,15 +1,19 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/loveable/card"
 import { Badge } from "@/app/components/loveable/badge"
 import { Button } from "@/app/components/loveable/button"
 import { Calendar, Clock } from "lucide-react"
 import { Shift } from "@/app/shared/types/models"
 import { formatTimeRange } from "@/app/shared/utils/other"
+import { useRouter } from "next/navigation"
 
 interface Props {
   shifts: (Shift & { groupName: string })[]
 }
 
 export const UpcomingShiftsCard = ({ shifts }: Props) => {
+  const router = useRouter()
   return (
     <Card className="border-0 shadow-lg">
       <CardHeader>
@@ -40,7 +44,7 @@ export const UpcomingShiftsCard = ({ shifts }: Props) => {
             </div>
           ))}
         </div>
-        <Button variant="outline" className="w-full mt-4">
+        <Button variant="outline" className="w-full mt-4" onClick={() => router.push("/user/calendar")}>
           צפה בכל המשמרות
         </Button>
       </CardContent>

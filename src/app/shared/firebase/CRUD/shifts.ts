@@ -37,4 +37,30 @@ export async function getUserUpcomingShifts(userId: string): Promise<(Shift & { 
     })
   
     return shifts
-  } 
+  }
+
+export async function getAllShiftsForUser(userId: string): Promise<(Shift & { groupName: string })[]> {
+  const shiftsRef = validCollection<Shift>(collection)
+  const q = query(
+    shiftsRef,
+    where('users', 'array-contains', userId),
+    orderBy('startDate', 'desc')
+  )
+  const snapshot = await getDocs(q)
+
+  const groups = await getAllGroups();
+  const groupsMap = new Map(groups.map(group => [group.id, group.displayName]));
+
+  const shifts: (Shift & { groupName: string })[] = []
+  snapshot.forEach(doc => {
+    const data = doc.data()
+    const groupName = groupsMap.get(data.groupId) ?? ''
+    shifts.push({
+      id: doc.id,
+      ...data,
+      groupName,
+    } as Shift & { groupName: string })
+  })
+
+  return shifts
+} 
