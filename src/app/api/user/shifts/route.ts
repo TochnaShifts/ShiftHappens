@@ -4,14 +4,12 @@ import { getUserUpcomingShifts, getAllShiftsForUser } from '@/app/shared/firebas
 
 export const POST = apiHandler(async (req: NextRequest) => {
   const { action, data } = await req.json()
-  const userId = data?.userId
-  if (!userId) throw new Error('Missing userId')
 
   switch (action) {
     case 'getUpcoming':
-      return { data: await getUserUpcomingShifts(userId) }
+      return { data: await getUserUpcomingShifts(data) }
     case 'getAllForUser':
-      return { data: await getAllShiftsForUser(userId) }
+      return { data: await getAllShiftsForUser(data) }
     default:
       throw new Error('Unknown action')
   }

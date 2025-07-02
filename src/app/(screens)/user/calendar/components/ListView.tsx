@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/app/components/lovea
 import { Button } from "@/app/components/loveable/button";
 import { Clock, MapPin } from "lucide-react";
 import { Shift } from "@/app/shared/types";
-import { getGroupColor } from "./groupColorUtils";
+import { getGroupColor } from "./utils";
 
 function formatTimeRange(start: Date, end: Date) {
   const pad = (n: number) => n.toString().padStart(2, '0');

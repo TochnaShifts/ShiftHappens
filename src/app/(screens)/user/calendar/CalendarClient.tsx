@@ -2,11 +2,11 @@
 import { getAllShiftsForUser } from "@/app/api/user/shifts/functions";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { CalendarHeader } from "./CalendarHeader";
-import { ListView } from "./ListView";
-import { CalendarMonthView } from "./CalendarMonthView";
+import { CalendarHeader } from "./components/CalendarHeader";
+import { ListView } from "./components/ListView";
+import { CalendarMonthView } from "./components/CalendarMonthView";
 import { Group, Request, Shift, User } from "@/app/shared/types";
-import { CalendarLegends } from "./CalendarLegends";
+import { CalendarLegends } from "./components/CalendarLegends";
 import { RequestType } from "@/app/shared/types/enums";
 
 export default function CalendarClient({ user, userGroups, requests }: { user: User, userGroups:  Group[], requests: Request[] }) {
@@ -49,10 +49,6 @@ export default function CalendarClient({ user, userGroups, requests }: { user: U
       }
       return newDate;
     });
-  };
-
-  const handleNewRequest = () => {
-    router.push('/requests');
   };
 
   return (

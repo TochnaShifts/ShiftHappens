@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Heebo } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/app/components/loveable/toaster";
 
 const heebo = Heebo({
   subsets: ["latin"],
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" dir="rtl">
       <body className={heebo.className}>        
         {children}
+        <Toaster />
       </body>
     </html>
   );

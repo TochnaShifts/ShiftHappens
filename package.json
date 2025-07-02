@@ -28,7 +28,7 @@
     "react": "^19.0.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.58.1",
+    "react-hook-form": "^7.59.0",
     "react-resizable-panels": "^3.0.3",
     "recharts": "^2.15.4",
     "sonner": "^2.0.5",
@@ -37,7 +37,7 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2",
-    "zod": "^3.25.67"
+    "zod": "^3.25.68"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -1,4 +1,4 @@
-import { getDocs } from "firebase/firestore";
+import { addDoc, getDocs, setDoc } from "firebase/firestore";
 import { query, where } from "firebase/firestore";
 import { Request } from "../../types/models";
 import { createDoc, deleteDocById, getCollection, getDocById, updateDocById } from "../firestore-crud";
@@ -30,4 +30,9 @@ export async function getRequestsByUserId(userId: string): Promise<Request[]> {
     })
 
     return requests
+  };
+
+  export async function CreateNewRequest (request: Request) {
+    
+    await createDoc(collection, request)
   }

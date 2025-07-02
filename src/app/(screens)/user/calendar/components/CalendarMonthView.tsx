@@ -11,8 +11,7 @@ import { Button } from "@/app/components/loveable/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayShiftsDialog } from "./DayShiftsDialog";
 import { Request, RequestType, Shift } from "@/app/shared/types";
-import { getGroupColor } from "./groupColorUtils";
-import { dayNames, formatTimeRange, getDaysInMonth, getExcludeRequestsForDate, getShiftsForDate, monthNames } from "./utils";
+import { dayNames, formatTimeRange, getDaysInMonth, getExcludeRequestsForDate, getGroupColor, getShiftsForDate, monthNames } from "./utils";
 
 
 interface CalendarMonthViewProps {

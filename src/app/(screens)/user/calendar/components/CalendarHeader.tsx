@@ -1,7 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/app/components/loveable/toggle-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/loveable/select";
+import { Select, SelectItem } from "@/app/components/loveable/select";
 import { Button } from "@/app/components/loveable/button";
 import { Calendar as CalendarIcon, Filter, Plus, Calendar as CalendarViewIcon, List } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   groups,
 }) => {
   const router = useRouter();
-  const handleNewRequest = () => router.push('/requests');
+  const handleNewRequest = () => router.push('/user/requests');
 
   return (
     <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
@@ -53,18 +53,10 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
                 רשימה
               </ToggleGroupItem>
             </ToggleGroup>
-            <Select value={selectedGroup} onValueChange={setSelectedGroup} dir="rtl">
-              <SelectTrigger className="w-full sm:w-40">
-                <Filter className="w-4 h-4 ml-2" />
-                <SelectValue placeholder="סנן קבוצות" />
-              </SelectTrigger>
-              <SelectContent>
-                {groups.map((group) => (
-                  <SelectItem key={group.value} value={group.value}>
-                    {group.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+            <Select value={selectedGroup} onChange={e => setSelectedGroup(e.target.value)} dir="rtl" placeholder="בחר קבוצה">
+              {groups.map((group) => (
+                <SelectItem key={group.value} value={group.value}>{group.label}</SelectItem>
+              ))}
             </Select>
             <Button size="sm" className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700" onClick={handleNewRequest} dir="ltr">
               <Plus className="w-4 h-4 ml-2" />

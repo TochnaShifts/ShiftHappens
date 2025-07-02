@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { Gender } from './enums';
+import { Gender, RequestType } from './enums';
 
 export const userRegisterSchema = z.object({
   username: z.string().min(1, 'נדרש שם משתמש'),
@@ -22,3 +22,16 @@ export const userLoginSchema = z.object({
 });
 
 export type UserLoginZod = z.infer<typeof userLoginSchema>;
+
+
+export const requestFormSchema = z.object({
+  type: z.string().optional(),
+  startDate: z.string().min(1, "תאריך התחלה נדרש"),
+  endDate: z.string().min(1, "תאריך סיום נדרש"),
+  description: z.string().optional(),
+}).refine(
+  (data) => data.type && [RequestType.Exclude, RequestType.Prefer].includes(Number(data.type)),
+  { message: "סוג הבקשה נדרש", path: ["type"] }
+);
+
+export type RequestFormZod = z.infer<typeof requestFormSchema>;

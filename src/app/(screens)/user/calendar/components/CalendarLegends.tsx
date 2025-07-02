@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/loveable/card";
-import { getGroupColor } from "./groupColorUtils";
+import { getGroupColor } from "./utils";
 
 export const CalendarLegends = ({ shifts }: { shifts: any[] }) => {
     // Get unique groupIds and groupNames for legend

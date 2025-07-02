@@ -4,14 +4,12 @@ import { getCompletedShiftsHoursThisMonth, getUserRankInEachGroup } from '@/app/
 
 export const POST = apiHandler(async (req: NextRequest) => {
   const { action, data } = await req.json()
-  const userId = data?.userId
-  if (!userId) throw new Error('Missing userId')
 
   switch (action) {
     case 'getUserRanks':
-      return {data: await getUserRankInEachGroup(userId),}
+      return {data: await getUserRankInEachGroup(data),}
     case 'getCompletedShiftsHoursThisMonth':
-      return { data: await getCompletedShiftsHoursThisMonth(userId) }
+      return { data: await getCompletedShiftsHoursThisMonth(data) }
     default:
       throw new Error('Unknown action')
   }

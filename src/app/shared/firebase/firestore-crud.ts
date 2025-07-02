@@ -19,7 +19,7 @@ import { validCollection } from '../utils/firestoreConverters';
   // Create a new document with auto-generated ID
 
   export async function createDoc<T>(collectionName: string, data: T): Promise<string> {
-    const colRef = collection(db, collectionName);
+    const colRef = validCollection<T>(collectionName);
     const docRef = await addDoc(colRef, data as DocumentData);
     return docRef.id;
   }

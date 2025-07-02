@@ -3,9 +3,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/app/components/loveable/dialog";
 import { Badge } from "@/app/components/loveable/badge";
 import { Shift } from "@/app/shared/types";
-import { getGroupColor } from "./groupColorUtils";
-import { Clock, MapPin } from "lucide-react";
-import { formatTimeRange } from "./utils";
+import { Clock } from "lucide-react";
+import { formatTimeRange, getGroupColor } from "./utils";
 
 interface DayShiftsDialogProps {
   open: boolean;

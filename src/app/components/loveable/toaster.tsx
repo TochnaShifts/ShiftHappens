@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useToast } from "@/app/hooks/use-toast"
 import {
@@ -8,16 +8,16 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/app/components/loveable/toast"
+  } from "@/app/components/loveable/toast"
 
 export function Toaster() {
   const { toasts } = useToast()
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {toasts.map(function ({ id, title, description, action, open, onOpenChange, ...props }) {
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} open={open} onOpenChange={onOpenChange} {...props}>
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
