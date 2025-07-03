@@ -1,11 +1,18 @@
-import { loadUserContext } from "@/app/shared/loaders/loadUserContext";
+'use client'
+
 import { RequestList } from "./RequestList";
 import { RequestForm } from "./RequestForm";
 import { FileText } from "lucide-react";
 import { RequestsHelpSection } from "./RequestsHelpSection";
+import { useUser } from "@/app/contexts/UserContext";
+import { queryKeys } from "@/app/shared/utils/queryKeys";
+import { useQuery } from "@tanstack/react-query";
+import { getRequestsByUserId } from "@/app/api/user/requests/functions";
+import { useGetUserRequests } from "./hooks";
 
-export default async function RequestsPage() {
-  const { user, requests } = await loadUserContext();
+export default function RequestsPage() {
+  const { user } = useUser();
+  const { data: requests } = useGetUserRequests(user?.id || "");
   if (!user) {
     return <div>עליך להתחבר כדי לצפות בבקשות</div>;
   }
@@ -27,7 +34,7 @@ export default async function RequestsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <RequestForm user={user} />
-          <RequestList requests={requests} />
+          <RequestList requests={requests || []} />
         </div>
         <RequestsHelpSection />
       </div>

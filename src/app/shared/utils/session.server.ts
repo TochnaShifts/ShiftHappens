@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { User } from '@/app/shared/types'
+import { cache } from 'react'
 
 export const setSessionCookie = async (user: User) => {
   const cookieStore = await cookies()
@@ -24,7 +25,7 @@ export const clearSession = async () => {
   cookieStore.set('session', '', { maxAge: 0 })
 }
 
-export const verifyAuth = (req: NextRequest): User | null => {
+export const verifyAuth = cache((req: NextRequest): User | null => {
   const session = req.cookies.get('session')?.value
   if (!session) return null
 
@@ -33,4 +34,4 @@ export const verifyAuth = (req: NextRequest): User | null => {
   } catch {
     return null
   }
-}
+})

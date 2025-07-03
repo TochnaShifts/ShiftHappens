@@ -27,6 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { errorRequestToast, successRequestToast } from "@/app/shared/utils/toastUtilsl";
 import { DatePickerInput } from "@/app/components/ori/form/DatePickerInput";
 import { v4 as uuidv4 } from 'uuid';
+import { useCreateRequest } from "./hooks";
 
 interface RequestFormProps {
   user: User;
@@ -45,6 +46,7 @@ const initialNewRequest = (user: User, request: RequestFormZod) => ({
 export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const { mutate: createRequest } = useCreateRequest();
 
   const { register, handleSubmit, reset, formState: { errors }, control } = useForm<RequestFormZod>({
     resolver: zodResolver(requestFormSchema),
@@ -56,7 +58,7 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
     setLoading(true);
     try {
 
-      await createRequest(initialNewRequest(user, data));
+      createRequest(initialNewRequest(user, data));
       
       reset();
       toast({title: "הבקשה נשלחה", description: "הבקשה שלך נקלטה במערכת בהצלחה"});

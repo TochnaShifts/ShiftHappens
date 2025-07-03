@@ -2,33 +2,27 @@
 
 import React from "react";
 import { UserProvider } from "@/app/contexts/UserContext";
-import { Group, User, UserCategory } from "@/app/shared/types";
+import { User } from "@/app/shared/types";
 import { ClientLayoutWrapper } from "@/app/components/ori/layout/ClientLayoutWrapper";
+import { DehydratedState, HydrationBoundary } from "@tanstack/react-query";
 
 type Props = {
   user: User | null;
-  userGroups: Group[];
-  groupsAdmin: Group[];
-  userCategories: UserCategory[];
+  dehydratedState: DehydratedState;
   children: React.ReactNode;
 };
 
 const ClientShellComponent = ({
   user,
-  userGroups,
-  groupsAdmin,
-  userCategories,
+  dehydratedState,
   children,
 }: Props) => {
   return (
-    <UserProvider
-      initialUser={user}
-      initialUserGroups={userGroups}
-      initialGroupsAdmin={groupsAdmin}
-      initialUserCategories={userCategories}
-    >
-      <ClientLayoutWrapper user={user}>{children}</ClientLayoutWrapper>
-    </UserProvider>
+    <HydrationBoundary state={dehydratedState}>
+      <UserProvider initialUser={user}>
+        <ClientLayoutWrapper user={user}>{children}</ClientLayoutWrapper>
+      </UserProvider>
+    </HydrationBoundary>
   );
 };
 

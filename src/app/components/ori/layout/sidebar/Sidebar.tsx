@@ -13,12 +13,23 @@ import { SidebarNavButton } from "./SidebarNavButton";
 import { regularUserNav, groupAdminNav, globalAdminNav } from "./navConfig";
 
 import { Button } from "@/app/components/loveable";
+import { getGroupsByIds } from "@/app/shared/firebase/CRUD/groups";
+import { queryKeys } from "@/app/shared/utils/queryKeys";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAdminGroups, fetchUserGroups } from "@/app/shared/queries/userQueries";
+import { useUserAdminGroups, useUserGroups } from "@/app/shared/hooks";
 
 export const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const params = useParams();
-  const { user, userGroups, groupsAdmin, signOut } = useUser();
+  const { user, signOut } = useUser();
+  const { data: userGroups } = useUserGroups(user)
+  const { data: groupsAdmin } = useUserAdminGroups(user)
+
+  if (!userGroups || !groupsAdmin) {
+    return <div>Loading...</div>
+  }
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
   const toggleMobile = () => setMobileOpen(!mobileOpen);

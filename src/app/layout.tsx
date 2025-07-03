@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Heebo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/app/components/loveable/toaster";
+import { QueryProvider } from "@/app/shared/QueryProvider";
 
 const heebo = Heebo({
   subsets: ["latin"],
@@ -21,8 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" dir="rtl">
       <body className={heebo.className}>        
+      <QueryProvider>
         {children}
         <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );
