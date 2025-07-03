@@ -18,7 +18,7 @@ const getStatusColor = (status: string) => {
 };
 
 const getTypeLabel = (type: RequestType) => {
-  return type === RequestType.Exclude ? "לא יכול לעבוד" : "מעוניין לעבוד";
+  return type === RequestType.Exclude ? "לא יכול (הסתייגות)" : "יכול (העדפה)";
 };
 
 const getStatusLabel = (status: string) => {
@@ -30,7 +30,25 @@ const getStatusLabel = (status: string) => {
   }
 };
 
+const getTypeBadge = (type: RequestType) => {
+  if (type === RequestType.Prefer) {
+    return (
+      <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-200 text-green-900 text-sm font-semibold shadow-sm border border-green-300">
+        העדפה <span className="text-lg ml-1">👍</span>
+      </span>
+    );
+  } else if (type === RequestType.Exclude) {
+    return (
+      <span className="inline-flex items-center px-3 py-1 rounded-full bg-red-200 text-red-900 text-sm font-semibold shadow-sm border border-red-300">
+        הסתייגות <span className="text-lg ml-1">🛑</span>
+      </span>
+    );
+  }
+  return null;
+};
+
 export const RequestList: React.FC<RequestListProps> = ({ requests }) => {
+  const sortedRequests = [...requests].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   return (
     <Card className="border-0 shadow-lg">
       <CardHeader>
@@ -44,7 +62,7 @@ export const RequestList: React.FC<RequestListProps> = ({ requests }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4 overflow-y-auto max-h-[500px]">
-          {requests.map((request) => (
+          {sortedRequests.map((request) => (
             <div key={request.id} className="p-4 bg-gray-50 rounded-lg">
               <div className="flex justify-between items-start mb-3">
                 <div>
@@ -55,7 +73,7 @@ export const RequestList: React.FC<RequestListProps> = ({ requests }) => {
                     הוגש ב-{new Date(request.createdAt).toLocaleDateString('he-IL')}
                   </p>
                 </div>
-                <Badge className={getStatusColor("submitted")}>{getStatusLabel("submitted")}</Badge>
+                {getTypeBadge(request.type)}
               </div>
               <div className="flex items-center text-sm text-gray-600 mb-2">
                 <Calendar className="w-4 h-4 ml-1" />

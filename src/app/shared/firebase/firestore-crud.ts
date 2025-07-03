@@ -29,7 +29,7 @@ import { validCollection } from '../utils/firestoreConverters';
     collectionName: string,
     data: T
   ): Promise<string> {
-    const colRef = collection(db, collectionName);
+    const colRef = validCollection<T>(collectionName);
     const docRef = doc(colRef, data.id); // use your own ID
     await setDoc(docRef, data as DocumentData);
     return data.id;

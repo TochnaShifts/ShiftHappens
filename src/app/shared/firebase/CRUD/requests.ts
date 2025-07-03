@@ -1,8 +1,10 @@
-import { addDoc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { query, where } from "firebase/firestore";
 import { Request } from "../../types/models";
-import { createDoc, deleteDocById, getCollection, getDocById, updateDocById } from "../firestore-crud";
+import { createDoc, createDocWithCustomId, deleteDocById, getCollection, getDocById, updateDocById } from "../firestore-crud";
 import { validCollection } from "../../utils/firestoreConverters";
+import { v4 as uuidv4 } from 'uuid';
+import { db } from "../clientApp";
 
 const collection = 'requests';
 
@@ -32,7 +34,14 @@ export async function getRequestsByUserId(userId: string): Promise<Request[]> {
     return requests
   };
 
-  export async function CreateNewRequest (request: Request) {
-    
-    await createDoc(collection, request)
-  }
+export async function CreateNewRequest(request: Request) {
+  const newRequest = {
+    ...request,
+    id: uuidv4(),
+    createdAt: new Date(request.createdAt),
+    startDate: new Date(request.startDate),
+    endDate: new Date(request.endDate),
+  };
+  const docId = await createDocWithCustomId(collection, newRequest);
+  return { ...newRequest, id: docId };
+}

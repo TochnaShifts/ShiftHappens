@@ -32,6 +32,16 @@ export const requestFormSchema = z.object({
 }).refine(
   (data) => data.type && [RequestType.Exclude, RequestType.Prefer].includes(Number(data.type)),
   { message: "סוג הבקשה נדרש", path: ["type"] }
+)
+.refine(
+  (data) => {
+    if (!data.startDate || !data.endDate) return true;
+    return new Date(data.startDate) <= new Date(data.endDate);
+  },
+  {
+    message: "תאריך התחלה לא יכול להיות מאוחר מתאריך סיום",
+    path: ["endDate"],
+  }
 );
 
 export type RequestFormZod = z.infer<typeof requestFormSchema>;

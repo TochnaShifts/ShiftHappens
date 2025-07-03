@@ -13,7 +13,7 @@ import { Input } from "@/app/components/loveable/input";
 import { Label } from "@/app/components/loveable/label";
 import { Textarea } from "@/app/components/loveable/textarea";
 import { Select, SelectItem } from "@/app/components/loveable/select";
-import { Plus } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useToast } from "@/app/hooks/use-toast";
 import { createRequest } from "@/app/api/user/requests/functions";
 import { RequestType, User } from "@/app/shared/types";
@@ -25,6 +25,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { errorRequestToast, successRequestToast } from "@/app/shared/utils/toastUtilsl";
+import { DatePickerInput } from "@/app/components/ori/form/DatePickerInput";
+import { v4 as uuidv4 } from 'uuid';
 
 interface RequestFormProps {
   user: User;
@@ -44,10 +46,11 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<RequestFormZod>({
+  const { register, handleSubmit, reset, formState: { errors }, control } = useForm<RequestFormZod>({
     resolver: zodResolver(requestFormSchema),
     defaultValues: requestInitialState,
   });
+
 
   const onSubmit = async (data: RequestFormZod) => {
     setLoading(true);
@@ -68,7 +71,6 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
     <Card className="border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <Plus className="w-5 h-5 ml-2 text-blue-600" />
           הגש בקשה חדשה
         </CardTitle>
         <CardDescription>
@@ -85,30 +87,32 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
               placeholder="בחר סוג בקשה"
             >
               <SelectItem value={RequestType.Exclude}>
-                לא יכול לעבוד (הרחקה)
+                לא יכול (הסתייגות)
               </SelectItem>
-              <SelectItem value={RequestType.Prefer}>מעוניין לעבוד</SelectItem>
+              <SelectItem value={RequestType.Prefer}> יכול (העדפה)</SelectItem>
             </Select>
             {errors.type && (
               <p className="text-red-500 text-xs">{errors.type.message}</p>
             )}
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startDate">תאריך התחלה</Label>
-              <Input id="startDate" type="date" {...register("startDate")} />
-              {errors.startDate && (
-                <p className="text-red-500 text-xs">
-                  {errors.startDate.message}
-                </p>
-              )}
+            <div className="space-y-2 ">
+              <DatePickerInput
+                name="startDate"
+                control={control}
+                label="תאריך התחלה"
+                error={errors.startDate?.message}
+                disabled={loading}
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="endDate">תאריך סיום</Label>
-              <Input id="endDate" type="date" {...register("endDate")} />
-              {errors.endDate && (
-                <p className="text-red-500 text-xs">{errors.endDate.message}</p>
-              )}
+              <DatePickerInput
+                name="endDate"
+                control={control}
+                label="תאריך סיום"
+                error={errors.endDate?.message}
+                disabled={loading}
+              />
             </div>
           </div>
           <div className="space-y-2">
