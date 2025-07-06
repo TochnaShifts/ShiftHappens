@@ -15,7 +15,8 @@ export const useUserGroups = (user: User | null) => {
     return useQuery({
       queryKey: queryKeys.groupsAdmin,
       queryFn: () => fetchAdminGroups(user!),
-      enabled: !!user && user.groups.some(g => g.isAdmin),
+      enabled: !!user,
+      initialData: [],
     })
   }
   

@@ -53,8 +53,11 @@ export const QuickStatsCards: React.FC<QuickStatsCardsProps> = ({
     'from-yellow-600 to-yellow-700',
   ];
 
+  // Use a responsive grid that splits KPIs evenly, regardless of count
+  const gridClass = "grid gap-6 mb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div className={gridClass} style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(220px, 1fr))` }}>
       {/* משמרות קרובות */}
       <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white">
         <CardHeader className="pb-2">
@@ -103,8 +106,6 @@ export const QuickStatsCards: React.FC<QuickStatsCardsProps> = ({
           <Clock className="w-4 h-4 opacity-75 mt-2" />
         </CardContent>
       </Card>
-
-      
     </div>
   );
 };

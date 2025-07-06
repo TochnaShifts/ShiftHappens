@@ -97,7 +97,7 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
               <p className="text-red-500 text-xs">{errors.type.message}</p>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2 ">
               <DatePickerInput
                 name="startDate"

@@ -27,6 +27,7 @@ export const Sidebar = () => {
   const { data: userGroups } = useUserGroups(user)
   const { data: groupsAdmin } = useUserAdminGroups(user)
 
+  console.log(groupsAdmin)
   if (!userGroups || !groupsAdmin) {
     return <div>Loading...</div>
   }

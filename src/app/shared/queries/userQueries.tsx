@@ -7,10 +7,11 @@ export const fetchUserGroups = async (user: User) =>
     groups.filter((g): g is Group => g !== null)
   );
 
-export const fetchAdminGroups = async (user: User) =>
-  getGroupsByIds(
-    user.groups.filter((g) => g.isAdmin).map((g) => g.groupId)
-  ).then((groups) => groups.filter((g): g is Group => g !== null));
+export const fetchAdminGroups = async (user: User) => {
+  const groupsAdmin = user.groups.filter((g) => g.isAdmin).map((g) => g.groupId)
+  if (groupsAdmin.length === 0) return []
+  return getGroupsByIds(groupsAdmin).then((groups) => groups.filter((g): g is Group => g !== null));
+}
 
 export const fetchUserCategories = async (user: User) =>
   getUserCategoriesByIds(user.userCategories).then((categories) =>
