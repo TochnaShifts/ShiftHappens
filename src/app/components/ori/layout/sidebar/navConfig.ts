@@ -9,7 +9,6 @@ import {
     { label: "לוח שנה", path: "/user/calendar", icon: Calendar },
     { label: "בקשות", path: "/user/requests", icon: ClipboardList },
     { label: "נקודות", path: "/user/points", icon: Users },
-    { label: "הגדרות", path: "/user/settings", icon: Settings }
   ];
   
   export const groupAdminNav = (groupId: string) => [

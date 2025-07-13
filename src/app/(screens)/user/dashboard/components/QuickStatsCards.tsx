@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/loveable/card";
-import { Calendar, BarChart3, Users, Clock } from "lucide-react";
+import { Calendar, Users, Clock } from "lucide-react";
 import { Shift } from "@/app/shared/types";
 import { RecentActivityItem } from "@/app/shared/firebase/CRUD/regularUser/dashboard";
+import { getGroupIconComponent } from "@/app/shared/utils/groupIcons";
 
 type UserRank = {
   groupId: string;
@@ -44,14 +45,6 @@ export const QuickStatsCards: React.FC<QuickStatsCardsProps> = ({
     ? `המשמרת הבאה ב-${new Date(nextShift.startDate).toLocaleDateString()}`
     : "אין משמרות קרובות";
 
-  // Fixed color palette for up to 5 groups
-  const rankColors = [
-    'from-green-600 to-green-700',
-    'from-purple-600 to-purple-700',
-    'from-pink-600 to-pink-700',
-    'from-blue-600 to-blue-700',
-    'from-yellow-600 to-yellow-700',
-  ];
 
   // Use a responsive grid that splits KPIs evenly, regardless of count
   const gridClass = "grid gap-6 mb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
@@ -60,50 +53,87 @@ export const QuickStatsCards: React.FC<QuickStatsCardsProps> = ({
     <div className={gridClass} style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(220px, 1fr))` }}>
       {/* משמרות קרובות */}
       <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium opacity-90">משמרות קרובות</CardTitle>
-          <div className="text-2xl font-bold">{upcomingCount}</div>
+        <CardHeader className="pb-2 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <CardTitle className="text-sm font-medium opacity-90">משמרות קרובות</CardTitle>
+            <Calendar className="w-5 h-5 opacity-90" />
+
+          </div>
+          <div className="text-3xl font-bold">{upcomingCount}</div>
         </CardHeader>
-        <CardContent>
-          <p className="text-xs opacity-75">{nextShiftDateText}</p>
-          <Calendar className="w-4 h-4 opacity-75 mt-2" />
+        <CardContent className="text-center">
+          <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+            <p className="text-sm opacity-90 font-medium">{nextShiftDateText}</p>
+          </div>
         </CardContent>
       </Card>
 
-      {userRanks.map((rank, idx) => (
-        <Card
-          key={rank.groupId}
-          className={`border-0 shadow-lg bg-gradient-to-br ${rankColors[Math.min(idx, rankColors.length - 1)]} text-white`}
-        >
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium opacity-90">
-              דירוג {rank.groupDisplayName} 
-            </CardTitle>
-            <div className="text-2xl font-bold">
-              #{rank.rank}
-            </div>
+      {/* דירוגים - Side by Side with Better Colors */}
+      {userRanks.length > 0 && (
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-600 to-green-700 text-white">
+          <CardHeader className="pb-2 text-center">
+            <CardTitle className="text-sm font-medium opacity-90">דירוגים שלך</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-xs opacity-75">
-              מתוך {rank.totalUsers} חברים
-            </p>
+          <CardContent className="text-center">
+            <div className="flex flex-wrap gap-2">
+              {userRanks.slice(0, 3).map((rank, idx) => {
+                const rankColors = [
+                  'from-amber-400 to-amber-500', // Subtle gold
+                  'from-slate-300 to-slate-400', // Subtle silver  
+                  'from-orange-400 to-orange-500' // Subtle bronze
+                ];
+                
+                const GroupIcon = getGroupIconComponent(rank.groupDisplayName);
+                
+                return (
+                  <div 
+                    key={rank.groupId} 
+                    className="flex-1 min-w-0 bg-white/10 rounded-lg p-3 backdrop-blur-sm hover:bg-white/15 transition-all duration-200"
+                  >
+                    <div className="text-center">
+                      <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${rankColors[idx] || 'from-blue-400 to-blue-500'} flex items-center justify-center text-xs font-bold mx-auto mb-2 shadow-md`}>
+                        <GroupIcon className="w-4 h-4" />
+                      </div>
+                      <p className="text-sm font-medium truncate">{rank.groupDisplayName}</p>
+                      <p className="text-xs opacity-75 mt-1">#{rank.rank}</p>
+                    </div>
+                  </div>
+                );
+              })}
+              {userRanks.length > 3 && (
+                <div className="flex-1 min-w-0 bg-white/10 rounded-lg p-3 backdrop-blur-sm hover:bg-white/15 transition-all duration-200">
+                  <div className="text-center">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-500 flex items-center justify-center text-xs font-bold mx-auto mb-2 shadow-md">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <p className="text-sm font-medium">ועוד</p>
+                    <p className="text-xs opacity-75 mt-1">{userRanks.length - 3} קבוצות</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
-      ))}
+      )}
 
       {/* שעות החודש */}
       <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-600 to-orange-700 text-white">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium opacity-90">שעות החודש</CardTitle>
-          <div className="text-2xl font-bold">
+        <CardHeader className="pb-2 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <CardTitle className="text-sm font-medium opacity-90">שעות החודש</CardTitle>
+            <Clock className="w-5 h-5 opacity-90" />
+
+          </div>
+          <div className="text-3xl font-bold">
             {Math.floor(completedShiftsHoursThisMonth.totalHours)}
           </div>
         </CardHeader>
-        <CardContent>
-          <p className="text-xs opacity-75">
-            {completedShiftsHoursThisMonth.completedShiftsCount} משמרות הושלמו
-          </p>
-          <Clock className="w-4 h-4 opacity-75 mt-2" />
+        <CardContent className="text-center">
+          <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+            <p className="text-sm opacity-90 font-medium">
+              {completedShiftsHoursThisMonth.completedShiftsCount} משמרות הושלמו
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -6,6 +6,7 @@ import { useUser } from "@/app/contexts/UserContext";
 import { useGroupMembersPoints, useGroupsUserStats } from "./hooks/pointsHooks";
 import PointsHeader from "./components/PointsHeader";
 import { PointsKpis } from "./components/PointsKpis";
+import GroupMembersTable from "./components/GroupMembersTable/GroupMembersTable";
 
 export default function PointsPage() {
   const { user } = useUser();
@@ -15,7 +16,7 @@ export default function PointsPage() {
 
   console.log("groupMembersPoints", groupMembersPoints);
   console.log("groupUserStats", groupUserStats);
-  if (!groupMembersPoints || !groupUserStats) return <div>Loading...</div>;
+  if (!user || !groupMembersPoints || !groupUserStats) return <div>Loading...</div>;
 
   return (
     <div
@@ -25,6 +26,7 @@ export default function PointsPage() {
       <PointsHeader />
       <div className="container mx-auto px-4 py-8">
         <PointsKpis groupUserStats={groupUserStats}/>
+        <GroupMembersTable groupMembersPoints={groupMembersPoints} currentUserId={user.id}/>
       </div>
     </div>
   );

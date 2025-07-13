@@ -5,6 +5,7 @@ import {
   CardTitle,
 } from "@/app/components/loveable/card";
 import { Calendar, Users } from "lucide-react";
+import { getGroupIconComponent } from "@/app/shared/utils/groupIcons";
 
 const rankColors = [
   "from-green-600 to-green-700",
@@ -31,35 +32,41 @@ export const PointsKpis = ({
       className="gap-6 mb-8"
       style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(220px, 1fr))` }}
     >
-      {groupUserStats.map((group, idx) => (
-        <Card
-          key={group.groupId}
-          className={`border-0 shadow-lg bg-gradient-to-br ${rankColors[idx % rankColors.length]} text-white`}
-        >
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium opacity-90">
-              {group.groupName}
-            </CardTitle>
-            <div className="flex items-center gap-0 mt-2">
-              <div className="flex flex-col items-center w-1/2">
-                <span className="text-xs opacity-80">דירוג</span>
-                <span className="text-2xl font-bold">#{group.rank}</span>
+      {groupUserStats.map((group, idx) => {
+        const GroupIcon = getGroupIconComponent(group.groupName);
+        
+        return (
+          <Card
+            key={group.groupId}
+            className={`border-0 shadow-lg bg-gradient-to-br ${rankColors[idx % rankColors.length]} text-white`}
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium opacity-90 flex items-center justify-center gap-2 text-center">
+                {group.groupName}
+                <GroupIcon className="w-4 h-4" />
+
+              </CardTitle>
+              <div className="flex items-center gap-0 mt-2">
+                <div className="flex flex-col items-center w-1/2">
+                  <span className="text-xs opacity-80">דירוג</span>
+                  <span className="text-2xl font-bold">#{group.rank}</span>
+                </div>
+                <div className="h-10 border-l border-white/30 mx-0" />
+                <div className="flex flex-col items-center w-1/2">
+                  <span className="text-xs opacity-80">משמרות השבוע</span>
+                  <span className="text-2xl font-bold">{group.weeklyShifts}</span>
+                </div>
               </div>
-              <div className="h-10 border-l border-white/30 mx-0" />
-              <div className="flex flex-col items-center w-1/2">
-                <span className="text-xs opacity-80">משמרות השבוע</span>
-                <span className="text-2xl font-bold">{group.weeklyShifts}</span>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2 text-xs opacity-75">
+                <Users className="w-4 h-4" />
+                מתוך {group.members} חברים
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2 text-xs opacity-75">
-              <Users className="w-4 h-4" />
-              מתוך {group.members} חברים
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };
