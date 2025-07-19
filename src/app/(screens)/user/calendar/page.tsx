@@ -10,6 +10,7 @@ import { CalendarHeader } from "./components/CalendarHeader";
 import { ListView } from "./components/ListView";
 import { CalendarMonthView } from "./components/CalendarMonthView";
 import { CalendarLegends } from "./components/CalendarLegends";
+import { LoadingSpinner } from "@/app/components";
 
 export default function CalendarPage() {
   const { user } = useUser();
@@ -22,7 +23,7 @@ export default function CalendarPage() {
    const router = useRouter()
 
   if (userGroupsLoading || requestsLoading || shiftsLoading) {
-    return <div>Loading...</div>
+    return <LoadingSpinner size="lg" fullPage />
   }
   if (!user) {
     return <div>עליך להתחבר כדי לצפות בלוח השנה</div>
@@ -74,7 +75,7 @@ export default function CalendarPage() {
              selectedGroup={selectedGroup}
              currentUserId={user.id}
              navigateMonth={navigateMonth}
-             requests={requests?.filter(r => r.type === RequestType.Exclude) || []}
+             requests={requests || []}
            />
          )}
          {/* Dynamic Legend */}

@@ -62,6 +62,33 @@ export const getDaysInMonth = (date: Date) => {
     });
   }
 
+  export const getPreferRequestsForDate = (day: number, requests: Request[], currentDate: Date) => {
+    if (!day) return [];
+    const checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    return requests.filter(request => {
+      const startDate = new Date(request.startDate);
+      const endDate = new Date(request.endDate);
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+      checkDate.setHours(12, 0, 0, 0);
+      return checkDate >= startDate && checkDate <= endDate && request.type === RequestType.Prefer;
+    });
+  }
+
+export const getRequestsForDate = (day: number, requests: Request[], currentDate: Date) => {
+    if (!day) return [];
+    const checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    return requests.filter(request => {
+      const startDate = new Date(request.startDate);
+      const endDate = new Date(request.endDate);
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+      checkDate.setHours(12, 0, 0, 0);
+      return checkDate >= startDate && checkDate <= endDate && 
+             (request.type === RequestType.Exclude || request.type === RequestType.Prefer);
+    });
+  }
+
   
 export const formatTimeRange = (start: Date, end: Date) => {
   const pad = (n: number) => n.toString().padStart(2, "0");

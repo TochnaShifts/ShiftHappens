@@ -8,10 +8,12 @@ import {
   CardTitle,
 } from "@/app/components/loveable/card";
 import { Button } from "@/app/components/loveable/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { DayShiftsDialog } from "./DayShiftsDialog";
+import { DeleteRequestDialog } from "./DeleteRequestDialog";
 import { Request, RequestType, Shift } from "@/app/shared/types";
-import { dayNames, formatTimeRange, getDaysInMonth, getExcludeRequestsForDate, getGroupColor, getShiftsForDate, monthNames } from "./utils";
+import { dayNames, formatTimeRange, getDaysInMonth, getExcludeRequestsForDate, getPreferRequestsForDate, getRequestsForDate, getGroupColor, getShiftsForDate, monthNames } from "./utils";
+import { useDeleteRequest } from "../hooks";
 
 
 interface CalendarMonthViewProps {
@@ -27,17 +29,38 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogShifts, setDialogShifts] = useState<(Shift & { groupName?: string })[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [requestToDelete, setRequestToDelete] = useState<Request | null>(null);
+  const deleteRequestMutation = useDeleteRequest();
 
-  
+  function isDatePrefered(day: number) {
+    return getPreferRequestsForDate(day, requests, currentDate).length > 0;
+  }
+
   function isDateExcluded(day: number) {
     return getExcludeRequestsForDate(day, requests, currentDate).length > 0;
   }
+
 
   const handleDayClick = (day: number) => {
     const dayShifts = getShiftsForDate(day, shifts, currentDate, selectedGroup);
     if (dayShifts.length > 0) {
       setDialogShifts(dayShifts);
       setDialogOpen(true);
+    }
+  };
+
+  const handleDeleteRequest = (request: Request, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setRequestToDelete(request);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteRequest = () => {
+    if (requestToDelete) {
+      deleteRequestMutation.mutate(requestToDelete.id);
+      setDeleteDialogOpen(false);
+      setRequestToDelete(null);
     }
   };
 
@@ -95,25 +118,41 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
                   new Date().getFullYear() === currentDate.getFullYear();
 
                 const excludeRequests = getExcludeRequestsForDate(day!, requests, currentDate);
+                const allRequests = getRequestsForDate(day!, requests, currentDate);
+                const userRequests = allRequests.filter(request => request.userId === currentUserId);
                 const isExcluded = isDateExcluded(day!);
+                const isPrefered = isDatePrefered(day!);
 
                 return (
                   <div
                     key={index}
-                    className={`relative min-h-[90px] min-w-[80px] sm:min-w-0 p-1 sm:p-2 border rounded-lg transition-colors ${
+                    className={`relative min-h-[90px] min-w-[80px] sm:min-w-0 p-1 sm:p-2 border rounded-lg transition-colors group ${
                       day
                         ? isExcluded
                           ? 'bg-red-50 border-red-200 hover:bg-red-100'
+                          : isPrefered
+                          ? 'bg-green-50 border-green-200 hover:bg-green-100'
                           : 'bg-white hover:bg-gray-50 border-gray-200 cursor-pointer'
                         : 'bg-gray-50 border-gray-100'
-                    } ${isToday && !isExcluded ? 'ring-2 ring-blue-500' : ''} ${isToday && isExcluded ? 'ring-2 ring-red-500' : ''}`}
+                    } ${isToday && !isExcluded && !isPrefered ? 'ring-2 ring-blue-500' : ''} ${isToday && isExcluded ? 'ring-2 ring-red-500' : ''} ${isToday && isPrefered ? 'ring-2 ring-green-500' : ''}`}
                     onClick={() => day && !isExcluded && handleDayClick(day as number)}
                     style={{ cursor: day ? (isExcluded ? 'not-allowed' : 'pointer') : 'default' }}
                   >
                     {day && (
                       <>
+                        {/* Delete button for user's requests */}
+                        {userRequests.length > 0 && (
+                          <button
+                            onClick={(e) => handleDeleteRequest(userRequests[0], e)}
+                            className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                            title="מחק בקשה"
+                          >
+                            <X className="w-3 h-3 text-red-600 hover:text-red-800" />
+                          </button>
+                        )}
+                        
                         <div className={`text-xs sm:text-sm font-medium mb-1 ${
-                          isToday ? (isExcluded ? 'text-red-600' : 'text-blue-600') : (isExcluded ? 'text-red-700' : 'text-gray-900')
+                          isToday ? (isExcluded ? 'text-red-600' : isPrefered ? 'text-green-600' : 'text-blue-600') : (isExcluded ? 'text-red-700' : isPrefered ? 'text-green -700' : 'text-gray-900')
                         }`}>
                           {day}
                         </div>
@@ -131,6 +170,22 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
                             ))}
                           </div>
                         )}
+                        {/* Prefer requests display */}
+                        {allRequests.filter(r => r.type === RequestType.Prefer).length > 0 && (
+                          <div className="space-y-1">
+                            {allRequests
+                              .filter(request => request.type === RequestType.Prefer)
+                              .map((request: Request) => (
+                                <div
+                                  key={request.id}
+                                  className="text-xs p-1 rounded bg-green-100 text-green-800 border border-green-300"
+                                >
+                                  <div className="font-medium">העדפה</div>
+                                  <div className="text-xs opacity-90 mt-1">{request.description}</div>
+                                </div>
+                              ))}
+                          </div>
+                        )}
                         {/* Regular shifts display (only when not excluded) */}
                         {!isExcluded && (
                           <div className="space-y-1">
@@ -140,10 +195,7 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
                               return (
                                 <div
                                   key={shift.id}
-                                  className={`text-xs sm:text-xs p-1 rounded whitespace-normal break-words ${getGroupColor(
-                                    shift.groupId,
-                                    uniqueGroupIds
-                                  )}`}
+                                  className="text-xs sm:text-xs p-1 rounded whitespace-normal break-words bg-blue-100 text-blue-900 border border-blue-300"
                                 >
                                   <div className="font-medium whitespace-normal break-words sm:truncate">
                                     {shift.displayName}
@@ -170,6 +222,13 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
         onOpenChange={setDialogOpen}
         shifts={dialogShifts}
         currentUserId={currentUserId}
+      />
+      <DeleteRequestDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        request={requestToDelete}
+        onConfirm={confirmDeleteRequest}
+        isLoading={deleteRequestMutation.isPending}
       />
     </>
   );

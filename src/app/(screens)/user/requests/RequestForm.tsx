@@ -28,6 +28,7 @@ import { errorRequestToast, successRequestToast } from "@/app/shared/utils/toast
 import { DatePickerInput } from "@/app/components/ori/form/DatePickerInput";
 import { v4 as uuidv4 } from 'uuid';
 import { useCreateRequest } from "./hooks";
+import { LoadingSpinner } from "@/app/components";
 
 interface RequestFormProps {
   user: User;
@@ -131,7 +132,14 @@ export const RequestForm: React.FC<RequestFormProps> = ({ user }) => {
             className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
             disabled={loading}
           >
-            {loading ? "שולח..." : "שלח בקשה"}
+            {loading ? (
+              <div className="flex items-center space-x-2 space-x-reverse">
+                <LoadingSpinner size="sm" />
+                <span>שולח...</span>
+              </div>
+            ) : (
+              "שלח בקשה"
+            )}
           </Button>
         </form>
       </CardContent>

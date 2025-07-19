@@ -7,6 +7,7 @@ import { useGroupMembersPoints, useGroupsUserStats } from "./hooks/pointsHooks";
 import PointsHeader from "./components/PointsHeader";
 import { PointsKpis } from "./components/PointsKpis";
 import GroupMembersTable from "./components/GroupMembersTable/GroupMembersTable";
+import { LoadingSpinner } from "@/app/components";
 
 export default function PointsPage() {
   const { user } = useUser();
@@ -16,7 +17,9 @@ export default function PointsPage() {
 
   console.log("groupMembersPoints", groupMembersPoints);
   console.log("groupUserStats", groupUserStats);
-  if (!user || !groupMembersPoints || !groupUserStats) return <div>Loading...</div>;
+  if (!user || !groupMembersPoints || !groupUserStats) {
+    return <LoadingSpinner size="lg" fullPage />;
+  }
 
   return (
     <div

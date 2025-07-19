@@ -12,6 +12,27 @@ export const getAllShifts = () => getCollection<Shift>(collection);
 export const updateShift = (id: string, data: Partial<Shift>) => updateDocById<Shift>(collection, id, data);
 export const deleteShift = (id: string) => deleteDocById(collection, id);
 
+export async function getShiftsByGroupId(groupId: string): Promise<Shift[]> {
+  const shiftsRef = validCollection<Shift>(collection)
+  const q = query(
+    shiftsRef,
+    where('groupId', '==', groupId),
+    orderBy('startDate', 'desc')
+  )
+  const snapshot = await getDocs(q)
+
+  const shifts: Shift[] = []
+  snapshot.forEach(doc => {
+    shifts.push({
+      id: doc.id,
+      ...doc.data(),
+    } as Shift)
+  })
+
+  console.log(`Found ${shifts.length} shifts for group ${groupId}`);
+  return shifts
+}
+
 export async function getUserUpcomingShifts(userId: string): Promise<(Shift & { groupName: string })[]> {
     const shiftsRef = validCollection<Shift>(collection)
     const q = query(

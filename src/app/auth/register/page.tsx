@@ -11,6 +11,7 @@ import { UsernameInput, FullNameInput, GenderSelect } from './components'
 import { GroupMultiSelect, CategoryMultiSelect, PasswordInput } from '@/app/components/ori'
 import { Button } from '@/app/components/loveable/button'
 import { Alert, AlertDescription } from '@/app/components/loveable/alert';
+import { LoadingSpinner } from '@/app/components'
 
 interface RegisterFormProps {
   onRegistrationSuccess: () => void;
@@ -69,8 +70,15 @@ export default function RegisterForm({ onRegistrationSuccess }: RegisterFormProp
       />
 
       <Button type="submit" className="w-full" dir="ltr" disabled={isSubmitting}>
-        {isSubmitting ? 'נרשם...' : (
-          <><UserPlus className="w-4 h-4 ml-2" /> הרשמה</>
+        {isSubmitting ? (
+          <div className="flex items-center space-x-2 space-x-reverse">
+            <LoadingSpinner size="sm" />
+            <span>נרשם...</span>
+          </div>
+        ) : (
+          <>
+            <UserPlus className="w-4 h-4 ml-2" /> הרשמה
+          </>
         )}
       </Button>
 

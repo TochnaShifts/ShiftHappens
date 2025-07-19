@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { queryKeys } from '@/app/shared/utils/queryKeys'
 import { useUserAdminGroups, useUserCategories, useUserGroups } from '@/app/shared/hooks'
 import { useGetUpcomingShiftsForUser, useGetUserPointsByGroup, useGetRecentUserActivity, useGetUserRanks, useGetCompletedShiftsHoursThisMonth } from './hooks/dashboardHooks'
-import LoadingSpinner from '@/app/components/ori/LoadingSpinner'
+import { LoadingSpinner } from '@/app/components'
 
 export default function DashboardPage() {
   const { user } = useUser()
@@ -25,7 +25,7 @@ const { data: userRanks, isLoading: userRanksLoading } = useGetUserRanks(user!.i
 const { data: completedShiftsHoursThisMonth, isLoading: completedShiftsHoursThisMonthLoading } = useGetCompletedShiftsHoursThisMonth(user!.id)
   
 if (upcomingShiftsLoading || pointsDataLoading || recentActivityLoading || userRanksLoading || completedShiftsHoursThisMonthLoading) {
-  return <LoadingSpinner />
+  return <LoadingSpinner size="lg" fullPage />
 }
 
   return (

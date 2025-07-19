@@ -12,6 +12,7 @@ import { User } from '@/app/shared/types'
 import { userLoginSchema, UserLoginZod } from '@/app/shared/types/zodSchemas'
 import {UsernameInput } from '../register/components'
 import { PasswordInput } from '../../components/ori/form'
+import { LoadingSpinner } from '@/app/components'
 
 type FormValues = UserLoginZod
 
@@ -55,7 +56,16 @@ export default function LoginForm() {
       </div>
 
       <Button type="submit" className="w-full" dir="ltr" disabled={isSubmitting}>
-        {isSubmitting ? 'מתחבר...' : <><LogIn className="w-4 h-4 ml-2" /> כניסה</>}
+        {isSubmitting ? (
+          <div className="flex items-center space-x-2 space-x-reverse">
+            <LoadingSpinner size="sm" />
+            <span>מתחבר...</span>
+          </div>
+        ) : (
+          <>
+            <LogIn className="w-4 h-4 ml-2" /> כניסה
+          </>
+        )}
       </Button>
     </form>
   )

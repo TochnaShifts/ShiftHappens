@@ -18,6 +18,7 @@ import { queryKeys } from "@/app/shared/utils/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAdminGroups, fetchUserGroups } from "@/app/shared/queries/userQueries";
 import { useUserAdminGroups, useUserGroups } from "@/app/shared/hooks";
+import { LoadingSpinner } from "@/app/components";
 
 export const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,7 +30,7 @@ export const Sidebar = () => {
 
   console.log(groupsAdmin)
   if (!userGroups || !groupsAdmin) {
-    return <div>Loading...</div>
+    return <LoadingSpinner size="md" fullPage />
   }
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");

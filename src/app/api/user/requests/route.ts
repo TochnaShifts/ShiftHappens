@@ -1,6 +1,6 @@
 import { apiHandler } from "@/app/shared/utils/apiHandler";
 import { NextRequest } from "next/server";
-import { CreateNewRequest, getRequestsByUserId } from "@/app/shared/firebase/CRUD/requests";
+import { CreateNewRequest, getRequestsByUserId, deleteRequest } from "@/app/shared/firebase/CRUD/requests";
 
 export const POST = apiHandler(async (req: NextRequest) => {
     const { action, data } = await req.json()
@@ -11,6 +11,8 @@ export const POST = apiHandler(async (req: NextRequest) => {
       }
       case 'createRequest':
         return { data: await CreateNewRequest(data) };
+      case 'deleteRequest':
+        return { data: await deleteRequest(data) };
       default:
         throw new Error('Unknown action')
     }

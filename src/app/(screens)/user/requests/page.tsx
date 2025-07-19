@@ -9,12 +9,18 @@ import { queryKeys } from "@/app/shared/utils/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { getRequestsByUserId } from "@/app/api/user/requests/functions";
 import { useGetUserRequests } from "./hooks";
+import { LoadingSpinner } from "@/app/components";
 
 export default function RequestsPage() {
   const { user } = useUser();
-  const { data: requests } = useGetUserRequests(user?.id || "");
+  const { data: requests, isLoading: requestsLoading } = useGetUserRequests(user?.id || "");
+  
   if (!user) {
     return <div>עליך להתחבר כדי לצפות בבקשות</div>;
+  }
+
+  if (requestsLoading) {
+    return <LoadingSpinner size="lg" fullPage />;
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50" dir="rtl">

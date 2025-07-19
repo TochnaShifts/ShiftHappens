@@ -2,6 +2,7 @@ import { getDocs, query, where, collection as firestoreCollection } from "fireba
 import { User } from "../../types/models";
 import { createDoc, deleteDocById, getCollection, getDocById, updateDocById, getDocByField } from "../firestore-crud";
 import { validCollection } from "../../utils/firestoreConverters";
+import { is } from "date-fns/locale";
 
 const collection = 'users';
 
@@ -17,3 +18,25 @@ export const getUserByUsername = async (username: string) => {
     const doc = querySnapshot.docs[0];
     return doc ? { id: doc.id, ...doc.data() } as User & { id: string } : null;
 }
+
+export const getUsersByGroupId = async (groupId: string): Promise<User[]> => {
+    const usersRef = validCollection<User>(collection);
+    
+    // Get all users and filter by group membership
+    const snapshot = await getDocs(usersRef);
+    
+    const users: User[] = [];
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        // Check if user is in this group (either as admin or regular member)
+        const isInGroup = data.groups?.some((group: any) => group.groupId === groupId);
+        if (isInGroup) {
+            users.push({
+                id: doc.id,
+                ...data
+            } as User);
+        }
+    });
+    
+    return users;
+};
