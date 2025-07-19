@@ -56,6 +56,26 @@ export async function apiDelete<T>(url: string, data?: any): Promise<T> {
   return res.json();
 }
 
+import { updateUserRole, updateUserCategories, addUsersToGroup } from "@/app/api/group-admin/[groupId]/users/functions";
+
+// User Management API functions
+export const userManagementApi = {
+  // Update user role in group
+  updateUserRole: async (groupId: string, userId: string, action: 'makeAdmin' | 'removeAdmin' | 'removeFromGroup', data?: any) => {
+    return await updateUserRole(groupId, userId, action);
+  },
+
+  // Update user categories
+  updateUserCategories: async (groupId: string, userId: string, userCategories: string[]) => {
+    return await updateUserCategories(groupId, userId, userCategories);
+  },
+
+  // Add users to group
+  addUsersToGroup: async (groupId: string, userIds: string[]) => {
+    return await addUsersToGroup(groupId, userIds);
+  },
+};
+
 const getRevivedObject = async (obj: Response) => {
   const text = await obj.text();
   const revivedObj = JSON.parse(text, reviveDates);

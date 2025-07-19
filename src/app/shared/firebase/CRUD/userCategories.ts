@@ -6,6 +6,7 @@ import { validCollection } from "../../utils/firestoreConverters";
 const collection = 'userCategories';
 
 export const getAllUserCategories = () => getCollection<UserCategory>(collection);
+export const getUserCategories = () => getCollection<UserCategory>(collection); // Alias for consistency
 export const createUserCategory = (data: UserCategory) => createDoc<UserCategory>(collection, data);
 export const updateUserCategory = (id: string, data: Partial<UserCategory>) => updateDocById<UserCategory>(collection, id, data);
 export const deleteUserCategory = (id: string) => deleteDocById(collection, id);

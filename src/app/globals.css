@@ -108,6 +108,81 @@
     flex-direction: row-reverse;
   }
 
+  /* Custom scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: #6b7280;
+  }
+  
+  .scrollbar-thumb-gray-600::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+  }
+  
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  /* Additional scrollbar overrides for dark theme */
+  *::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: #4b5563 !important;
+    border-radius: 3px;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #6b7280 !important;
+  }
+
+  /* Specific overrides for user details and modals */
+  .overflow-y-auto::-webkit-scrollbar-track,
+  .overflow-y-auto::-webkit-scrollbar {
+    background: transparent !important;
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: #4b5563 !important;
+    border-radius: 3px;
+  }
+  
+  /* Force transparent background for all scrollable elements */
+  div[class*="overflow"]::-webkit-scrollbar-track,
+  div[class*="scroll"]::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  /* Sheet content specific scrollbar */
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb {
+    background-color: #4b5563 !important;
+    border-radius: 3px;
+  }
+
   /* Mobile-specific improvements */
   @media (max-width: 768px) {
     /* Prevent horizontal scroll */

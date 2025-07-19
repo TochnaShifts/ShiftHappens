@@ -34,6 +34,29 @@ export const deleteUserGroupPoints = (id: string) =>
 export const createUserGroupPoints = (data: UserGroupPoints) =>
   createDoc<UserGroupPoints>(userGroupPointsCollection, data);
 
+export async function getUserGroupPointsByUserAndGroup(
+  userId: string,
+  groupId: string
+): Promise<UserGroupPoints | null> {
+  const pointsRef = validCollection(userGroupPointsCollection);
+  const q = query(
+    pointsRef, 
+    where("userId", "==", userId),
+    where("groupId", "==", groupId)
+  );
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    return null;
+  }
+
+  const doc = snapshot.docs[0];
+  return {
+    id: doc.id,
+    ...doc.data(),
+  } as UserGroupPoints;
+}
+
 export async function getUserPointsByGroup(
   userId: string
 ): Promise<{ groupId: string; groupName: string; count: number }[]> {
