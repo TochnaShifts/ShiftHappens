@@ -18,3 +18,9 @@ export enum RequestType {
     Male = 1,
     Female,
   }
+  
+  export enum ShiftStatus {
+    Active = 1,
+    Finished,
+    Cancelled,
+  }

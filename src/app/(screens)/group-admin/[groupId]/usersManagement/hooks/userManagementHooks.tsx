@@ -6,6 +6,7 @@ import { getShiftsByGroupId } from "@/app/shared/firebase/CRUD/shifts";
 import { getUserCategories } from "@/app/shared/firebase/CRUD/userCategories";
 import { userManagementApi } from "@/app/shared/utils/apiClient";
 import { User, UserCategory, UserGroupPoints, Shift, ShiftAssignment } from "@/app/shared/types";
+import { ShiftStatus } from "@/app/shared/types/enums";
 
 // Get all users in the system
 export const useGetAllUsers = () => {
@@ -157,7 +158,7 @@ export const useGetUserUpcomingShifts = (userId: string, groupId: string) => {
         const upcomingShifts = assignments
           .filter(assignment => {
             const shift = groupShifts.find(s => s.id === assignment.shiftId);
-            return shift && shift.startDate > now && !shift.isFinished;
+            return shift && shift.startDate > now && shift.status === ShiftStatus.Active;
           })
           .map(assignment => {
             const shift = groupShifts.find(s => s.id === assignment.shiftId);

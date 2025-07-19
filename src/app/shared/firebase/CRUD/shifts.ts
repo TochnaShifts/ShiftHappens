@@ -1,5 +1,6 @@
 import { getDocs, query, orderBy, where } from "firebase/firestore";
 import { Shift } from "../../types/models";
+import { ShiftStatus } from "../../types/enums";
 import { createDoc, deleteDocById, getCollection, getDocById, updateDocById } from "../firestore-crud";
 import { validCollection } from "../../utils/firestoreConverters";
 import { getAllGroups, getGroupById } from "./groups";
@@ -35,10 +36,11 @@ export async function getShiftsByGroupId(groupId: string): Promise<Shift[]> {
 
 export async function getUserUpcomingShifts(userId: string): Promise<(Shift & { groupName: string })[]> {
     const shiftsRef = validCollection<Shift>(collection)
+    
+    // Get all shifts for the user first (without status filter)
     const q = query(
       shiftsRef,
       where('users', 'array-contains', userId),
-      where('isFinished', '==', false),
       orderBy('startDate', 'desc')
     )
     const snapshot = await getDocs(q)
@@ -47,14 +49,28 @@ export async function getUserUpcomingShifts(userId: string): Promise<(Shift & { 
     const groupsMap = new Map(groups.map(group => [group.id, group.displayName]));
     
     const shifts: (Shift & { groupName: string })[] = []
+    const now = new Date()
+    
     snapshot.forEach(doc => {
       const data = doc.data()
       const groupName = groupsMap.get(data.groupId) ?? ''
-      shifts.push({
-        id: doc.id,
-        ...data,
-        groupName,
-      } as Shift & { groupName: string })
+      
+      // Check if this is an upcoming shift
+      const startDate = data.startDate.toDate ? data.startDate.toDate() : new Date(data.startDate)
+      const isUpcoming = startDate > now
+      
+      // Handle both old and new data structure
+      let isActive = false
+      isActive = data.status === ShiftStatus.Active && isUpcoming
+      
+      // Only include active/upcoming shifts
+      if (isActive) {
+        shifts.push({
+          id: doc.id,
+          ...data,
+          groupName,
+        } as Shift & { groupName: string })
+      }
     })
   
     return shifts

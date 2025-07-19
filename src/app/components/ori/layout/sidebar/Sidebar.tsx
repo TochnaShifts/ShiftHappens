@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import { Globe, Shield, Home, LogOut, Menu, X } from "lucide-react";
@@ -151,7 +151,7 @@ export const Sidebar = () => {
                 .map(({ id }) => {
                   const navItems = groupAdminNav(id);
                   return (
-                    <>
+                    <React.Fragment key={id}>
                       {navItems.map((item) => (
                         <SidebarNavButton
                           key={item.path}
@@ -163,7 +163,7 @@ export const Sidebar = () => {
                           onClick={closeMobile}
                         />
                       ))}
-                    </>
+                    </React.Fragment>
                   );
                 })}
               {/* Switch to another group admin view */}

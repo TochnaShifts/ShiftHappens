@@ -9,7 +9,7 @@ import {
   createUserCategory,
 } from '../src/app/shared/firebase/CRUD';
 import { v4 as uuidv4 } from 'uuid';
-import { Gender, MultiplierType, RequestType, AssignmentType } from '../src/app/shared/types/enums';
+import { Gender, MultiplierType, RequestType, AssignmentType, ShiftStatus } from '../src/app/shared/types/enums';
 import { hashPassword } from '../src/app/shared/utils/hash';
 import { getDocs, deleteDoc, collection } from 'firebase/firestore';
 import { db } from '../src/app/shared/firebase/clientApp';
@@ -356,7 +356,7 @@ async function seed() {
       excludedUserCategories: excludedCategories,
       users: usersForShift,
       points: 0.5 + i * 0.1,
-      isFinished: false,
+      status: ShiftStatus.Active,
       createdAt: new Date(),
     };
     shifts.push(shift);

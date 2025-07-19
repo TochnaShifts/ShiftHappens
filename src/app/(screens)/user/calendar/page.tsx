@@ -79,7 +79,7 @@ export default function CalendarPage() {
            />
          )}
          {/* Dynamic Legend */}
-         <CalendarLegends shifts={shifts || []} />
+         <CalendarLegends shifts={shifts || []} userGroups={userGroups || []} user={user} />
        </div>
      </div>
    )

@@ -1,4 +1,4 @@
-import { AssignmentType, Gender, MultiplierType, RequestType } from "./enums"
+import { AssignmentType, Gender, MultiplierType, RequestType, ShiftStatus } from "./enums"
 
 // UserGroupRole is a helper type for group membership with role info
 export type UserGroupRole = {
@@ -45,7 +45,7 @@ export type UserGroupRole = {
     excludedUserCategories: string[]
     users: string[] // assigned user IDs
     points: number
-    isFinished: boolean
+    status: ShiftStatus
     createdAt: Date
   }
   

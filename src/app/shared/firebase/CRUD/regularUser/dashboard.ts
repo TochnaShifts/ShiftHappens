@@ -1,4 +1,5 @@
 import { Group, Shift, UserGroupPoints } from "@/app/shared/types/models"
+import { ShiftStatus } from "@/app/shared/types/enums"
 import { db } from "../../clientApp"
 import { collection, getDocs, query, where, orderBy, limit, Timestamp } from "firebase/firestore"
 import { timestampToDateConverter, validCollection } from "@/app/shared/utils/firestoreConverters"
@@ -137,12 +138,12 @@ export type RecentActivityItem = {
     
     // Query shifts that:
     // - include this user in the 'users' array
-    // - are finished (isFinished === true)
+    // - are finished (status === ShiftStatus.Finished)
     // - have startDate in this month
     const q = query(
       shiftsRef,
       where("users", "array-contains", userId),
-      where("isFinished", "==", true),
+      where("status", "==", ShiftStatus.Finished),
       where("startDate", ">=", startOfMonth),
       where("endDate", "<=", endOfMonth),
     );

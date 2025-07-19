@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getShiftsByGroupId } from "@/app/shared/firebase/CRUD/shifts";
 import { getRequestsByGroupId } from "@/app/shared/firebase/CRUD/requests";
 import { getUsersByGroupId } from "@/app/shared/firebase/CRUD/users";
+import { ShiftStatus } from "@/app/shared/types/enums";
 
 // Get upcoming shifts for a specific group
 export const useGetUpcomingShiftsForGroup = (groupId: string) => {
@@ -11,7 +12,7 @@ export const useGetUpcomingShiftsForGroup = (groupId: string) => {
             try {
                 const shifts = await getShiftsByGroupId(groupId);
                 return shifts.filter(shift => 
-                    new Date(shift.startDate) > new Date() && !shift.isFinished
+                    new Date(shift.startDate) > new Date() && shift.status === ShiftStatus.Active
                 );
             } catch (error) {
                 console.error('Error fetching upcoming shifts:', error);

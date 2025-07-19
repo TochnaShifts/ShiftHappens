@@ -12,6 +12,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { DayShiftsDialog } from "./DayShiftsDialog";
 import { DeleteRequestDialog } from "./DeleteRequestDialog";
 import { Request, RequestType, Shift } from "@/app/shared/types";
+import { ShiftStatus } from "@/app/shared/types/enums";
 import { dayNames, formatTimeRange, getDaysInMonth, getExcludeRequestsForDate, getPreferRequestsForDate, getRequestsForDate, getGroupColor, getShiftsForDate, monthNames } from "./utils";
 import { useDeleteRequest } from "../hooks";
 
@@ -67,6 +68,55 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
   const uniqueGroupIds = Array.from(
     new Set(shifts.map((shift) => shift.groupId))
   );
+
+  // Function to get status-based styling for shifts
+  const getShiftStatusStyle = (shift: Shift) => {
+    // Handle both old and new data structure
+    let status: ShiftStatus;
+    if (shift.status !== undefined) {
+      status = shift.status;
+    } else {
+      // Old structure: determine status based on date (since isFinished is removed from type)
+      const now = new Date();
+      const startDate = new Date(shift.startDate);
+      if (startDate < now) {
+        status = ShiftStatus.Finished;
+      } else {
+        status = ShiftStatus.Active;
+      }
+    }
+
+    switch (status) {
+      case ShiftStatus.Active:
+        return {
+          bg: 'bg-yellow-100',
+          text: 'text-yellow-900',
+          border: 'border-yellow-300',
+          icon: '⏳'
+        };
+      case ShiftStatus.Finished:
+        return {
+          bg: 'bg-green-100',
+          text: 'text-green-900',
+          border: 'border-green-300',
+          icon: '✅'
+        };
+      case ShiftStatus.Cancelled:
+        return {
+          bg: 'bg-red-100',
+          text: 'text-red-900',
+          border: 'border-red-300',
+          icon: '❌'
+        };
+      default:
+        return {
+          bg: 'bg-gray-100',
+          text: 'text-gray-900',
+          border: 'border-gray-300',
+          icon: '⚪'
+        };
+    }
+  };
 
   return (
     <>
@@ -192,12 +242,14 @@ export const CalendarMonthView: React.FC<CalendarMonthViewProps> = ({currentDate
                             {dayShifts.slice(0, 2).map((shift: Shift  ) => {
                               const start = new Date(shift.startDate);
                               const end = new Date(shift.endDate);
+                              const statusStyle = getShiftStatusStyle(shift);
                               return (
                                 <div
                                   key={shift.id}
-                                  className="text-xs sm:text-xs p-1 rounded whitespace-normal break-words bg-blue-100 text-blue-900 border border-blue-300"
+                                  className={`text-xs sm:text-xs p-1 rounded whitespace-normal break-words ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border}`}
                                 >
-                                  <div className="font-medium whitespace-normal break-words sm:truncate">
+                                  <div className="font-medium whitespace-normal break-words sm:truncate flex items-center gap-1">
+                                    <span className="text-xs">{statusStyle.icon}</span>
                                     {shift.displayName}
                                   </div>
                                   <div className="text-[10px] sm:text-xs opacity-75 whitespace-normal break-words sm:truncate">
