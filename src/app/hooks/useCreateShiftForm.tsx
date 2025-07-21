@@ -53,9 +53,7 @@ export const useCreateShiftForm = () => {
       title: "המשמרת נוצרה בהצלחה",
       description: "המשמרת נשמרה ונשלחה למשתתפים המוקצים",
     });
-    navigate(`/admin/group/${groupId}/shifts`, {
-      groupId: groupId
-    });
+    navigate.push(`/admin/group/${groupId}/shifts`);
   };
 
   const handleSaveTemplate = () => {

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/app/componen
 import { Badge } from "@/app/components/loveable/badge";
 import { Shift } from "@/app/shared/types";
 import { ShiftStatus } from "@/app/shared/types/enums";
-import { Clock, CheckCircle, PlayCircle, XCircle } from "lucide-react";
+import { Clock, CheckCircle, PlayCircle, XCircle, MapPin } from "lucide-react";
 import { formatTimeRange, getGroupColor } from "./utils";
 
 interface DayShiftsDialogProps {
@@ -133,6 +133,10 @@ export const DayShiftsDialog: React.FC<DayShiftsDialogProps> = ({ open, onOpenCh
                             <StatusIcon className="w-3 h-3" />
                             {statusStyle.label}
                           </Badge>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                          <MapPin className="w-4 h-4 text-rose-500" />
+                          <span className="truncate">{shift.location}</span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600 mb-3">
                           <div className="flex items-center gap-2">

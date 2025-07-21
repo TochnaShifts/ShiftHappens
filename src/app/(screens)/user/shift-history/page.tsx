@@ -112,7 +112,7 @@ export default function ShiftHistoryPage() {
       return total + duration
     }, 0)
 
-    const totalPoints = statsShifts.reduce((total, shift) => total + shift.points, 0)
+    const totalPoints = statsShifts.reduce((total, shift) => total + shift.pointsPerHour, 0)
 
     return {
       totalHours: Math.round(totalHours * 10) / 10,

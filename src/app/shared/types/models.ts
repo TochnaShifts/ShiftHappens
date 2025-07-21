@@ -41,11 +41,13 @@ export type UserGroupRole = {
     displayName: string
     startDate: Date
     endDate: Date
-    includedUserCategories: string[]
-    excludedUserCategories: string[]
+    requiredUserCategories: string[]
+    forbiddenUserCategories: string[]
     users: string[] // assigned user IDs
-    points: number
+    pointsPerHour: number
+    details?: string
     status: ShiftStatus
+    location: string // NEW: required location property
     createdAt: Date
   }
   

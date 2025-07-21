@@ -132,7 +132,7 @@ export const useGetUserShiftHistory = (userId: string, groupId: string) => {
             date: shift?.startDate || new Date(),
             type: shift?.displayName || 'משמרת',
             duration: shift ? (shift.endDate.getTime() - shift.startDate.getTime()) / (1000 * 60 * 60) : 0,
-            points: shift?.points || 0,
+            points: shift?.pointsPerHour || 0,
           };
         }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       } catch (error) {

@@ -124,7 +124,7 @@ export const ShiftHistoryList = ({ shifts, currentUserId }: ShiftHistoryListProp
                             </div>
                             <div className="text-right">
                               <div className="text-2xl font-bold text-green-600">
-                                +{shift.points}
+                                +{shift.pointsPerHour} נקודות לשעה
                               </div>
                               <div className="text-sm text-gray-500">נקודות</div>
                             </div>

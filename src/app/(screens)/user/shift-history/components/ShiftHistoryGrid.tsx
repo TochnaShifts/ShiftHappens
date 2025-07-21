@@ -114,7 +114,7 @@ export const ShiftHistoryGrid = ({ shifts, currentUserId }: ShiftHistoryGridProp
           const end = new Date(shift.endDate)
           const duration = calculateShiftDuration(start, end)
           const isAssigned = currentUserId ? shift.users.includes(currentUserId) : false
-          const pointsDisplay = getPointsDisplay(shift.points)
+          const pointsDisplay = getPointsDisplay(shift.pointsPerHour)
           const statusDisplay = getStatusDisplay(shift.status)
           const PointsIcon = pointsDisplay.icon
           const StatusIcon = statusDisplay.icon
@@ -132,6 +132,10 @@ export const ShiftHistoryGrid = ({ shifts, currentUserId }: ShiftHistoryGridProp
                     <h3 className="font-bold text-gray-900 text-base group-hover:text-blue-600 transition-colors truncate">
                       {shift.displayName}
                     </h3>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <MapPin className="w-4 h-4 text-rose-500" />
+                    <span className="truncate">{shift.location}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <Badge 
@@ -178,7 +182,7 @@ export const ShiftHistoryGrid = ({ shifts, currentUserId }: ShiftHistoryGridProp
                 <div className="flex flex-col gap-3 pt-3 border-t border-gray-100">
                   <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full ${pointsDisplay.bg} self-start`}>
                     <PointsIcon className={`w-4 h-4 ${pointsDisplay.color}`} />
-                    <span className={`text-base font-bold ${pointsDisplay.color}`}>+{shift.points}</span>
+                    <span className={`text-base font-bold ${pointsDisplay.color}`}>+{shift.pointsPerHour}</span>
                     <span className="text-xs text-gray-500 font-medium">נקודות</span>
                   </div>
                   <div className="text-xs text-gray-400 flex items-center gap-1 justify-start">
@@ -201,6 +205,10 @@ export const ShiftHistoryGrid = ({ shifts, currentUserId }: ShiftHistoryGridProp
                         <h3 className="font-bold text-gray-900 text-lg group-hover:text-blue-600 transition-colors">
                           {shift.displayName}
                         </h3>
+                        <div className="flex items-center gap-1 text-xs text-gray-500 ml-2">
+                          <MapPin className="w-4 h-4 text-rose-500" />
+                          <span className="truncate max-w-[120px]">{shift.location}</span>
+                        </div>
                       </div>
                       <Badge 
                         className={`text-xs font-semibold px-3 py-1 ${getGroupColor(shift.groupId, uniqueGroupIds)}`}
@@ -245,7 +253,7 @@ export const ShiftHistoryGrid = ({ shifts, currentUserId }: ShiftHistoryGridProp
                   <div className="text-right ml-6">
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${pointsDisplay.bg} mb-3`}>
                       <PointsIcon className={`w-5 h-5 ${pointsDisplay.color}`} />
-                      <span className={`text-lg font-bold ${pointsDisplay.color}`}>+{shift.points}</span>
+                      <span className={`text-lg font-bold ${pointsDisplay.color}`}>+{shift.pointsPerHour}</span>
                     </div>
                     <div className="text-xs text-gray-500 font-medium mb-1">נקודות שהושגו</div>
                     <div className="text-xs text-gray-400 flex items-center gap-1 justify-end">

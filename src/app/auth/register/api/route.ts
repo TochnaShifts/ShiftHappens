@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
         isActive: true,
         isGlobalAdmin: false,
         userCategories: data.userCategories || [],
-        groups: (data.selectedGroups || []).map((groupId: string) => ({ groupId, isAdmin: false }))
+        groups: (data.selectedGroups || []).map((groupId: string) => ({ groupId, isAdmin: false })),
+        createdAt: new Date()
       }
 
       await createUser(newUser)

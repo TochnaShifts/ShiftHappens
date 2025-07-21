@@ -15,7 +15,7 @@ import {
   export const groupAdminNav = (groupId: string) => [
     { label: "לוח בקרה", path: `/group-admin/${groupId}/dashboard`, icon: BarChart3 },
     { label: "ניהול משתמשים", path: `/group-admin/${groupId}/usersManagement`, icon: Users },
-    { label: "יצירת משמרת", path: `/group-admin/${groupId}/shifts/create`, icon: Plus },
+    { label: "יצירת משמרת", path: `/group-admin/${groupId}/CreateShift`, icon: Plus },
     { label: "ניהול משמרות", path: `/group-admin/${groupId}/shifts`, icon: Calendar },
     { label: "ארכיון משמרות", path: `/group-admin/${groupId}/shifts/archive`, icon: Archive },
     { label: "ניהול בקשות", path: `/group-admin/${groupId}/requests`, icon: ClipboardList },

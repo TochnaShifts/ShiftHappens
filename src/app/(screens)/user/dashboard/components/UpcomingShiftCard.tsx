@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/loveable/card"
 import { Badge } from "@/app/components/loveable/badge"
 import { Button } from "@/app/components/loveable/button"
-import { Calendar, Clock } from "lucide-react"
+import { Calendar, Clock, MapPin } from "lucide-react"
 import { Shift } from "@/app/shared/types/models"
 import { formatTimeRange } from "@/app/shared/utils/other"
 import { useRouter } from "next/navigation"
@@ -33,10 +33,14 @@ export const UpcomingShiftsCard = ({ shifts }: Props) => {
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-gray-900">{shift.displayName}</h3>
                 <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-                  +{shift.points} נק'
+                  +{shift.pointsPerHour} נקודות לשעה
                 </Badge>
               </div>
               <p className="text-sm text-gray-600 mb-1">{shift.groupName}</p>
+              <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                <MapPin className="w-4 h-4 text-rose-500" />
+                <span className="truncate">{shift.location}</span>
+              </div>
               <div className="flex items-center text-sm text-gray-500">
                 <Clock className="w-4 h-4 ml-1" />
                 {shift.startDate.toLocaleDateString("he-IL")} • {formatTimeRange(shift.startDate, shift.endDate)}

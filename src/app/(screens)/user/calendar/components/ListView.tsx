@@ -84,7 +84,7 @@ export const ListView: React.FC<ListViewProps> = ({ shifts, selectedGroup, curre
                       <div className="flex flex-col items-end gap-2 mt-2 sm:mt-0">
                         {isAssigned && (
                           <div className="text-sm font-medium text-green-600 mb-1">
-                            +{shift.points} נקודות
+                            +{shift.pointsPerHour} נקודות לשעה
                           </div>
                         )}
                         {!isAssigned && (
